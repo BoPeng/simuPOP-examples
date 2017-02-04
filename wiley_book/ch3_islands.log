@@ -1,0 +1,26 @@
+>>> import simuPOP as sim
+>>> from simuPOP.utils import migrIslandRates
+>>> p = [0.2, 0.3, 0.5]
+>>> pop = sim.Population(size=[10000]*3, loci=1, infoFields='migrate_to')
+>>> simu = sim.Simulator(pop, rep=2)
+>>> simu.evolve(
+...     initOps=[sim.InitSex()] +
+...         [sim.InitGenotype(prop=[p[i], 1-p[i]], subPops=i) for i in range(3)],
+...     preOps=sim.Migrator(rate=migrIslandRates(0.01, 3), reps=0),
+...     matingScheme=sim.RandomMating(),
+...     postOps=[
+...         sim.Stat(alleleFreq=0, structure=0, vars='alleleFreq_sp', step=50),
+...         sim.PyEval("'Fst=%.3f (%s)\t' % (F_st, ', '.join(['%.2f' % "
+...             "subPop[x]['alleleFreq'][0][0] for x in range(3)]))",
+...             step=50),
+...         sim.PyOutput('\n', reps=-1, step=50),
+...     ],
+...     gen=201
+... )
+Fst=0.101 (0.20, 0.30, 0.50)	Fst=0.101 (0.20, 0.30, 0.50)	
+Fst=0.024 (0.28, 0.31, 0.42)	Fst=0.113 (0.20, 0.27, 0.51)	
+Fst=0.011 (0.30, 0.34, 0.40)	Fst=0.085 (0.24, 0.24, 0.48)	
+Fst=0.004 (0.38, 0.33, 0.38)	Fst=0.141 (0.22, 0.23, 0.54)	
+Fst=0.001 (0.39, 0.36, 0.37)	Fst=0.166 (0.19, 0.22, 0.55)	
+(201, 201)
+

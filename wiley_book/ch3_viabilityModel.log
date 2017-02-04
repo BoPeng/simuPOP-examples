@@ -1,0 +1,33 @@
+>>> import simuPOP as sim
+>>> pop = sim.Population(size=10000, loci=2, infoFields='fitness')
+>>> a, b, c, d = 1, 1.5, 2.5, 4
+>>> r = 0.02
+>>> pop.evolve(
+...     initOps=[
+...         sim.InitSex(),
+...         sim.InitGenotype(freq=(0.5, 0.5)),
+...         sim.PyOutput('LD,   AB,  Ab,  aB,  ab,  avg fitness\n'),
+...     ],
+...     preOps=[
+...         sim.MaSelector(loci=[0, 1], wildtype=0,
+...             fitness=[a, b, a, c, d, c, a, b, a]),
+...         sim.Stat(meanOfInfo='fitness'),
+...     ],
+...     matingScheme=sim.RandomMating(ops=sim.Recombinator(rates=r)),
+...     postOps=[
+...         sim.Stat(haploFreq=[0,1], LD=[0,1], step=20),
+...         sim.PyEval(r"'%.3f %.2f %.2f %.2f %.2f %.2f\n' % (LD[0][1], "
+...             "haploFreq[(0,1)][(0,0)], haploFreq[(0,1)][(0,1)],"
+...             "haploFreq[(0,1)][(1,0)], haploFreq[(0,1)][(1,1)],"
+...             "meanOfInfo['fitness'])", step=20),
+...     ],
+...     gen=100
+... )
+LD,   AB,  Ab,  aB,  ab,  avg fitness
+0.001 0.25 0.25 0.26 0.25 2.25
+0.022 0.23 0.27 0.27 0.23 2.26
+0.090 0.16 0.34 0.34 0.16 2.27
+0.178 0.07 0.43 0.43 0.07 2.36
+0.205 0.05 0.45 0.46 0.04 2.43
+100
+

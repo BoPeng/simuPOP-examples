@@ -1,0 +1,31 @@
+>>> import simuPOP as sim
+>>> pop = sim.Population(100, loci=[5]*3, infoFields='parent_idx')
+>>> pop.evolve(
+...     initOps=sim.InitGenotype(freq=[0.2]*5),
+...     preOps=sim.Dumper(structure=False, max=5),
+...     matingScheme=sim.HomoMating(
+...         sim.SequentialParentChooser(),
+...         sim.OffspringGenerator(ops=[
+...             sim.SelfingGenoTransmitter(),
+...             sim.ParentsTagger(infoFields='parent_idx'),
+...         ])
+...     ),
+...     postOps=sim.Dumper(structure=False, max=5),
+...     gen = 1
+... )
+SubPopulation 0 (), 100 Individuals:
+   0: MU 44100 01422 24423 | 43130 34400 10114 |  0
+   1: MU 33444 24430 34342 | 11320 34413 33201 |  0
+   2: MU 03434 40424 24240 | 34430 41214 30212 |  0
+   3: MU 13232 23304 20043 | 14130 02231 14240 |  0
+   4: MU 11112 30400 33342 | 34434 42211 33120 |  0
+
+SubPopulation 0 (), 100 Individuals:
+   0: MU 44100 34400 24423 | 44100 34400 10114 |  0
+   1: MU 33444 24430 33201 | 33444 24430 33201 |  1
+   2: FU 34430 41214 24240 | 34430 41214 24240 |  2
+   3: FU 13232 02231 14240 | 14130 02231 20043 |  3
+   4: MU 34434 30400 33342 | 11112 42211 33342 |  4
+
+1
+

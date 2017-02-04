@@ -1,0 +1,36 @@
+>>> import simuOpt
+>>> simuOpt.setOptions(gui=False, alleleType='binary')
+>>> import simuPOP as sim
+simuPOP : Copyright (c) 2004-2010 Bo Peng
+Developmental Version 1.0.5svn (Revision 3819, Nov 17 2010) for Python 2.7
+[MSC v.1500 32 bit (Intel)]
+Random Number Generator is set to mt19937 with random seed 0x12bfb2f7.
+This is the standard binary allele version with 2 maximum allelic states.
+For more information, please visit http://simupop.sourceforge.net,
+or email simupop-list@lists.sourceforge.net (subscription required).
+>>> pop.addInfoFields(['ancestry', 'migrate_to'])
+>>> # initialize ancestry
+>>> sim.initInfo(pop, [0]*pop.subPopSize(0) + [1]*pop.subPopSize(1),
+...     infoFields='ancestry')
+>>> # define two virtual subpopulations by ancestry value
+>>> pop.setVirtualSplitter(sim.InfoSplitter(field='ancestry', cutoff = [0.5]))
+>>> transmitters=[
+...     sim.MendelianGenoTransmitter(),
+...     sim.InheritTagger(mode=sim.MEAN, infoFields='ancestry')]
+>>> pop.evolve(
+...     initOps=sim.InitSex(),
+...     preOps=sim.Migrator(rate=[
+...         [0., 0], [0.05, 0]]), 
+...     matingScheme=sim.HeteroMating(
+...         matingSchemes=[
+...             sim.RandomMating(ops=transmitters),
+...             sim.RandomMating(subPops=[(0,0)], weight=-0.80, ops=transmitters),
+...             sim.RandomMating(subPops=[(0,1)], weight=-0.80, ops=transmitters)
+...         ],
+...     ),
+...     gen=10,
+... )
+10
+>>> # remove the second subpop
+>>> pop.removeSubPops(1)
+

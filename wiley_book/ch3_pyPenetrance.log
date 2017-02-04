@@ -1,0 +1,40 @@
+>>> import simuPOP as sim
+>>> import random
+>>> 
+>>> def breatCancer(geno, age):
+...     # brca1 is recessive
+...     if 0 in geno:
+...         return 0
+...     return [0, 0, 0.036, 0.18, 0.57, 0.75, 0.83][int(age/10)]
+... 
+>>> pop = sim.Population(size=10000, loci=1, infoFields='age',
+...     lociNames='BRCA1')
+>>> sim.initGenotype(pop, freq=[0.73, 0.27])
+>>> sim.initInfo(pop, lambda: random.randint(0, 69), infoFields='age')
+>>> sim.pyPenetrance(pop, func=breatCancer, loci=0)
+>>> pop.setVirtualSplitter(sim.CombinedSplitter([
+...     sim.InfoSplitter(field='age', cutoff=[30,40,50,60]),
+...     sim.ProductSplitter([
+...         sim.InfoSplitter(field='age', cutoff=[30,40,50,60]),
+...         sim.GenotypeSplitter(loci=0, alleles=[1,1], names='carrier'),
+...     ])]
+... ))
+>>> sim.stat(pop, numOfAffected=True, subPops=[(0, sim.ALL_AVAIL)],
+...     vars=['propOfAffected', 'propOfAffected_sp'])
+>>> print('Population prevalence is %.2f%%' % (pop.dvars().propOfAffected*100))
+Population prevalence is 4.56%
+>>> for x in range(pop.numVirtualSubPop()):
+...     print('Prevalence in group %s is %.2f%%' % \
+...         (pop.subPopName((0,x)), pop.dvars((0,x)).propOfAffected*100))
+... 
+Prevalence in group age < 30 is 0.07%
+Prevalence in group 30 <= age < 40 is 1.22%
+Prevalence in group 40 <= age < 50 is 3.69%
+Prevalence in group 50 <= age < 60 is 6.06%
+Prevalence in group age >= 60 is 6.12%
+Prevalence in group age < 30, carrier is 0.95%
+Prevalence in group 30 <= age < 40, carrier is 18.48%
+Prevalence in group 40 <= age < 50, carrier is 58.70%
+Prevalence in group 50 <= age < 60, carrier is 77.78%
+Prevalence in group age >= 60, carrier is 86.87%
+

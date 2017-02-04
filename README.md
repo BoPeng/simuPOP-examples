@@ -1,3 +1,4 @@
-# simuPOP examples
+# simuPOP-cookbook
+Collection of projects and sample scripts
 
-Collection of projects and sample scripts that use simuPOP
+

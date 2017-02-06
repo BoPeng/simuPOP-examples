@@ -1,8 +1,6 @@
-(:title Simulation of genome sequences with rare variants:)
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:srv.py | http://simupop.sourceforge.net/images/download.jpg]]|srv.py
+# Simulation of genome sequences with rare variants
 
-
-%color=red%NEWS%%:
+## NEWS
 
 * (Version 1.3) Jan, 13, 2014: The script has been updated to support simulation of regions on X-chromosome. A bug that prevents the use of some of the gamma distributions has been fixed.
 
@@ -12,30 +10,27 @@
 
 * May 4, 2011: An updated version is uploaded. This version adds a parameter @@postHook@@ to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [[Attach:evol.py|here]].
 
-%color=red%NOTE%%:
+## NOTE
 
 * This script is used to simulate mutants at all nucleotide locus over a short genome region, and should not be used to simulate sequences of, for example, more than 1 million basepairs (unless you are simulating a small population of no more than 10,000 individuals).
 
 * If you notice an error for memory allocation error, it is likely that you are using a 32bit operating system. Please consider running this script on a 64 OS with 64 bit of python and simuPOP, and with at least 4G of RAM.
 
-
-(:toc:)
-
-!! Introduction
+## Introduction
 
 This script simulates the introduction and evolution of genetic variants in one or more ''regions'' of chromosomes. These regions span roughly 10k to 100k basepair and can be considered as a gene. During evolution, mutants are introduced to the population and change the fitness of individuals who carry these mutants. '''The most distinguishing feature of this script is that it allows multi-locus fitness schemes with random or locus-specific diploid single-locus selection models to newly arising mutants'''. A multi-locus selection model is used to assign a fitness value to individuals according the mutants they carry.
 
 Please cite
 
-->Bo Peng, Xiaoming Liu (2011) [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/|'''Simulating Sequences of the Human Genome with Rare Variants''']] Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
+  Bo Peng, Xiaoming Liu (2011) [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/|'''Simulating Sequences of the Human Genome with Rare Variants''']] Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
 
 If you have used srv for your research.
 
-!!! Genotype structure
+### Genotype structure
 
 We assume one or more regions of chromosomes. Mutation can happen at any nucleotide locus which causes change of fitness of individuals carrying these mutants. The regions should be specified as @@'ch1:1..50000'@@. A list of regions is acceptable.
 
-!!! Demographic model
+### Demographic model
 
 This script uses a multi-stage population expansion / bottleneck model with population structure. Assuming there are n stages, the demographic model can be specified by
 
@@ -53,7 +48,7 @@ The default demographic model consists of a long burn-in stage, a short bottlene
 
 ->@@N=[8100, 8100, 7900, 900000], G=[8000, 100, 370]@@.
 
-!!! Mutation model
+### Mutation model
 
 This script supports two mutation models
 
@@ -68,7 +63,8 @@ This script can output a mutant file that dump all mutation events during evolut
 where type is 0 for forward, 1 for backward, 2 for relocated and 3 for ignored mutations.
 
 %red%NOTE: If you are using an infinite-sites model, please pay attention to the number of segregation sites (column 3 of the output) and see if the population has been saturated with new mutants (#segregation site == #sites).%%
-!!! Selection model
+
+### Selection model
 
 A random distribution is used to assign selection coefficients to newly arising mutations. This program incorporates multiple sets of selection parameters estimated from human genome data using different demographic models (Boyko, et al., 2008; Eyre-Walker, et al., 2006; Kryukov, et al., 2009; Williamson, et al., 2005).  For example, using a mixed gamma distribution, a mutant can have a selection coefficient of zeros (neutral alleles) or a random number drawn from a gamma distribution ranging from -0.00001 to -0.1 (Kryukov, et al., 2009).
 
@@ -82,17 +78,17 @@ If there are multiple mutants, the overall fitness of an individual is determine
 
 %red%NOTE: Fixed sites are reverted to wildtype alleles to avoid problems such as the Muller's Ratchet%%. You can remove operator RevertFixedSites from the script if this is not what you need.
 
-!!! Recombination
+### Recombination
 
 Because this script simulates small regions of chromosomes, recombination is usually ignored. However, if you would like to simulate longer regions, or simulate special cases such as unlinked loci (r=0.5), you can specify a recombination rate using parameter @@recRate@@, which specifies recombination rate per basepair per generation.
 
 %red%This script works best for either full recombination (r=0.5) or realistic LD (e.g. r < 1e-5), specifying large recombination rates (e.g. r=0.1) will results in low performance due to excessive number of recombinations.%%
 
-!!! Migration
+### Migration
 
 If a population is split into m subpopulations, a migration rate @@migrRate@@ can be specified to migrate individuals between subpopulations using an island model.
 
-!!! Output
+### Output
 
 The end result of this script include
 
@@ -106,23 +102,23 @@ The end result of this script include
 
 %blue%Note that fixed mutants are not counted as segregation sites but are included in the map and mutant files.%%
 
-!! Installation
+## Installation
 
 This script requires simuPOP 1.0.5 to execute. The installation steps are described in detail in the simuPOP website. If you are using windows, please
 * Download and install Python 2.6 from http://www.python.org.
 * Download and install simuPOP 1.0.5 or later from http://sourceforge.net/projects/simupop/files/
 * Download %red%[[Attach:srv.py|srv.py]]%% and execute.
 
-!! How to use this script
+## How to use this script
 
-!!! Graphical user interface
+### Graphical user interface
 
 This script can be run from a graphical user interface.
 
 Attach:simuRareVariants.jpg
 
 
-!!! Run from a command line in batch mode
+### Run from a command line in batch mode
 
 If you need to run it in batch mode, you can use command line, using options such as
 
@@ -130,14 +126,15 @@ If you need to run it in batch mode, you can use command line, using options suc
 
 Default values will be used for unspecified parameters. 
 
-!!! Import simuRareVariants from another script
+### Import simuRareVariants from another script
 
 You can import this script from another Python script and call its functions directly. Please see scripts in the examples section for details.
 
-!!! Complete list of options
+### Complete list of options
 
 This is the output of @@simuRareVariants.py -h@@
 
+```
 Simulating a population of sequences forward in time, subject to mutation,
 natural selection and population expansion. Because most mutants are introduced
 during the rapid population expansion, most of the alleles will be rare at the
@@ -336,12 +333,12 @@ options:
         0 for quiet, 1 for regular output, 2 for debug output. In the debug
         output, a file 'mutations.lst' will be saved with all mutation events.
         This option is not visible from gui.
+```
 
 
+### Examples
 
-!! Examples
-
-!!! Apply a penetrance or quantitative trait model
+### Apply a penetrance or quantitative trait model
 
 The selected population can be imported and post-processed using simuPOP. If you need to apply a quantitative trait model to the simulated population, you can use a function @@pyQuanTrait@@ using a user-defined function. The only difference is that 'alleles' in the simulated population are locations of mutants. Penetrance model can be assigned similarly. 
 
@@ -351,19 +348,19 @@ Example %red%[[Attach:pedigree.py|pedigree.py]]%% demonstrates how to evolve the
 
 These scripts import that calls the simuRareVariant function directly and uses functions defined in that script to save samples.
 
-!!! Arbitrary distribution of selection coefficients.
+### Arbitrary distribution of selection coefficients.
 
 The graphical user interface allows you to perform simulations for fix types (constant, gamma and mixed gamma). If you would like to define you own distribution, you can define a function that returns selection coefficient according to your distribution and pass it to the simuRareVariants function of simuRareVariants.py. You might need to use simuPOP's random number generation functions listed in [[http://simupop.sourceforge.net/manual_release/build/refManual_ch2_sec5.html#class-rng | here]].
 
 Example %red%[[Attach:myDist.py|myDist.py]]%% demonstrates how to define such a function.
 
-!!! Location-specific selection coefficients
+### Location-specific selection coefficients
 
 If you would like to define a selection model with selection coefficients related to mutation location. You can add a parameter @@loc@@ to the distribution function. In that case, the location (in basepair) of the new mutant will be passed to your function. This feature allows you to define a neutral region within a larger region under selection, or return neutral for mutation happens at the last nucleotide of a codon. Moreover, if you have fixed set of selection coefficients, you can use this feature to pass them to the script.
 
 Example %red%[[Attach:locSpecific.py|locSpecific.py]]%% demonstrates how to define a fitness function that returns location-specific fitness values.
 
-!!! Analyze all mutation events
+### Analyze all mutation events
 
 If you would like to have a list of all mutation events happened during the evolutionary process, you can add @@--verbose=2@@ to the command line. This will generate a file named @@mutations.lst@@ which lists all mutations in the format of
 
@@ -374,13 +371,13 @@ where type is 0 for forward mutation, 1 for backward mutation and 2 for ignored 
 
 Example %red%[[Attach:mutAge.py|mutAge.py]]%% demonstrates how to process this file and calculate the age of all mutants.
 
-!! Extending simuRareVariants.py
+## Extending simuRareVariants.py
 
-!!! Output more statistics such as the fitness value of everyone.
+### Output more statistics such as the fitness value of everyone.
 
 The default output of this script includes population size, number of segregation sites, average number of segregation sites per individual, average frequency of all mutants, average and mean fitness of individuals. You can modify the script to get more output. For example, you can use operator @@infoEval@@ with @@output='>>fitness.txt'"@@ to output fitness values for all individuals to a file. Please refer to the simuPOP user's guide on how to use these parameters.
 
-!! References
+## References
 
 * Boyko AR, Williamson SH, Indap AR, Degenhardt JD, Hernandez RD, Lohmueller KE, Adams MD, Schmidt S, Sninsky JJ, Sunyaev SR, White TJ, Nielsen R, Clark AG, Bustamante CD: Assessing the evolutionary impact of amino acid mutations in the human genome. PLoS Genet 2008;4:e1000083.
 

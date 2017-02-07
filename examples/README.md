@@ -3,7 +3,7 @@
 ## Demonstration of basic population genetics models
 
 This selection lists simple examples that demonstrates the classical population genetics models.
-* [Cookbook/GeneticDrift](Cookbook/GeneticDrift) Changes of allele frequency due to genetic drift.
+* [GeneticDrift](GeneticDrift.py) Changes of allele frequency due to genetic drift.
 
 * [Cookbook/DecayOfLD](Cookbook/DecayOfLD) Decay of Linkage disequilibrium due to recombination.
 

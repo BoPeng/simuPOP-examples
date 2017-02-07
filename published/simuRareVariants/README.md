@@ -8,7 +8,7 @@
 
 * %red%A bug that can cause incorrect genotype for recombinants under some rare conditions has been reported and fixed in trunk.%% If you are running the simulation with recombination, you should use simuPOP version 1.0.7 or higher.
 
-* May 4, 2011: An updated version is uploaded. This version adds a parameter @@postHook@@ to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [[Attach:evol.py|here]].
+* May 4, 2011: An updated version is uploaded. This version adds a parameter `postHook` to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [[Attach:evol.py|here]].
 
 ## NOTE
 
@@ -28,25 +28,25 @@ If you have used srv for your research.
 
 ### Genotype structure
 
-We assume one or more regions of chromosomes. Mutation can happen at any nucleotide locus which causes change of fitness of individuals carrying these mutants. The regions should be specified as @@'ch1:1..50000'@@. A list of regions is acceptable.
+We assume one or more regions of chromosomes. Mutation can happen at any nucleotide locus which causes change of fitness of individuals carrying these mutants. The regions should be specified as `'ch1:1..50000'`. A list of regions is acceptable.
 
 ### Demographic model
 
 This script uses a multi-stage population expansion / bottleneck model with population structure. Assuming there are n stages, the demographic model can be specified by
 
-->@@N = [N0, N1, ..., N_n-1, N_n]@@
-->@@G = [G0, G1, ..., G_n-1]@@
-->@@splitTo = [p1, p2, ..., pm]@@ and @@splitAt@@
+->`N = [N0, N1, ..., N_n-1, N_n]`
+->`G = [G0, G1, ..., G_n-1]`
+->`splitTo = [p1, p2, ..., pm]` and `splitAt`
 
 where N is the starting population size and size at the end of each stage, G is the number of generations at each stage, p1, p2, ..., pm are proportions of subpopulations (should sum to 1). Then,
 
 * If {$N_t \lt N_{t+1}$}, an exponential population expansion model is used to expand population from size {$N_t$} to {$N_{t+1}$}.
 * If {$N_t > N_{t+1}$}, an instant population reduction model is used to reduce population size instantly to {$N_{t+1}$}. 
-* If {$m > 1$}, the population will be split into @@m@@ subpopulations according to proportions p1, ..., pm, at geneartion @@splitAt@@.
+* If {$m > 1$}, the population will be split into `m` subpopulations according to proportions p1, ..., pm, at geneartion `splitAt`.
 
 The default demographic model consists of a long burn-in stage, a short bottleneck stage and a rapid population expansion stage. The burn-in stage of this demographic model evolves a relatively small population of 8100 individuals until it reaches a mutation selection equilibrium. After a short bottleneck stage of 7900 individuals, the population grows exponentially to a population of 900,000 individuals in 370 generations. This demographic model reflects a demographic model of the European population (Kryukov, et al., 2009) and should be specified as
 
-->@@N=[8100, 8100, 7900, 900000], G=[8000, 100, 370]@@.
+->`N=[8100, 8100, 7900, 900000], G=[8000, 100, 370]`.
 
 ### Mutation model
 
@@ -58,7 +58,7 @@ This script supports two mutation models
 
 This script can output a mutant file that dump all mutation events during evolution. This file has the format of
 
-->@@generation location individual_index type@@
+->`generation location individual_index type`
 
 where type is 0 for forward, 1 for backward, 2 for relocated and 3 for ignored mutations.
 
@@ -80,19 +80,19 @@ If there are multiple mutants, the overall fitness of an individual is determine
 
 ### Recombination
 
-Because this script simulates small regions of chromosomes, recombination is usually ignored. However, if you would like to simulate longer regions, or simulate special cases such as unlinked loci (r=0.5), you can specify a recombination rate using parameter @@recRate@@, which specifies recombination rate per basepair per generation.
+Because this script simulates small regions of chromosomes, recombination is usually ignored. However, if you would like to simulate longer regions, or simulate special cases such as unlinked loci (r=0.5), you can specify a recombination rate using parameter `recRate`, which specifies recombination rate per basepair per generation.
 
 %red%This script works best for either full recombination (r=0.5) or realistic LD (e.g. r < 1e-5), specifying large recombination rates (e.g. r=0.1) will results in low performance due to excessive number of recombinations.%%
 
 ### Migration
 
-If a population is split into m subpopulations, a migration rate @@migrRate@@ can be specified to migrate individuals between subpopulations using an island model.
+If a population is split into m subpopulations, a migration rate `migrRate` can be specified to migrate individuals between subpopulations using an island model.
 
 ### Output
 
 The end result of this script include
 
-* A file that saves population statistics if parameter @@statFile@@ is specified. Otherwise, the statistics will be written to standard output.
+* A file that saves population statistics if parameter `statFile` is specified. Otherwise, the statistics will be written to standard output.
 
 * A map file that contains the mutant location, frequency, selection coefficient and dominance coefficient. 
 
@@ -122,7 +122,7 @@ Attach:simuRareVariants.jpg
 
 If you need to run it in batch mode, you can use command line, using options such as
 
-->@@> simuRareVariants.py --gui=batch --selDist=gamma3@@
+->`> simuRareVariants.py --gui=batch --selDist=gamma3`
 
 Default values will be used for unspecified parameters. 
 
@@ -132,7 +132,7 @@ You can import this script from another Python script and call its functions dir
 
 ### Complete list of options
 
-This is the output of @@simuRareVariants.py -h@@
+This is the output of `simuRareVariants.py -h`
 
 ```
 Simulating a population of sequences forward in time, subject to mutation,
@@ -340,7 +340,7 @@ options:
 
 ### Apply a penetrance or quantitative trait model
 
-The selected population can be imported and post-processed using simuPOP. If you need to apply a quantitative trait model to the simulated population, you can use a function @@pyQuanTrait@@ using a user-defined function. The only difference is that 'alleles' in the simulated population are locations of mutants. Penetrance model can be assigned similarly. 
+The selected population can be imported and post-processed using simuPOP. If you need to apply a quantitative trait model to the simulated population, you can use a function `pyQuanTrait` using a user-defined function. The only difference is that 'alleles' in the simulated population are locations of mutants. Penetrance model can be assigned similarly. 
 
 Example %red%[[Attach:quanTraits.py|quanTraits.py]]%% demonstrates how to apply a quantitative trait model and draw samples with extreme trait values.
 
@@ -356,15 +356,15 @@ Example %red%[[Attach:myDist.py|myDist.py]]%% demonstrates how to define such a 
 
 ### Location-specific selection coefficients
 
-If you would like to define a selection model with selection coefficients related to mutation location. You can add a parameter @@loc@@ to the distribution function. In that case, the location (in basepair) of the new mutant will be passed to your function. This feature allows you to define a neutral region within a larger region under selection, or return neutral for mutation happens at the last nucleotide of a codon. Moreover, if you have fixed set of selection coefficients, you can use this feature to pass them to the script.
+If you would like to define a selection model with selection coefficients related to mutation location. You can add a parameter `loc` to the distribution function. In that case, the location (in basepair) of the new mutant will be passed to your function. This feature allows you to define a neutral region within a larger region under selection, or return neutral for mutation happens at the last nucleotide of a codon. Moreover, if you have fixed set of selection coefficients, you can use this feature to pass them to the script.
 
 Example %red%[[Attach:locSpecific.py|locSpecific.py]]%% demonstrates how to define a fitness function that returns location-specific fitness values.
 
 ### Analyze all mutation events
 
-If you would like to have a list of all mutation events happened during the evolutionary process, you can add @@--verbose=2@@ to the command line. This will generate a file named @@mutations.lst@@ which lists all mutations in the format of
+If you would like to have a list of all mutation events happened during the evolutionary process, you can add `--verbose=2` to the command line. This will generate a file named `mutations.lst` which lists all mutations in the format of
 
-->@@generation  location  individual_index type@@
+->`generation  location  individual_index type`
 
 where type is 0 for forward mutation, 1 for backward mutation and 2 for ignored mutation in the infinite-site model. You can process this file to trace the age of all mutants.
 
@@ -375,7 +375,7 @@ Example %red%[[Attach:mutAge.py|mutAge.py]]%% demonstrates how to process this f
 
 ### Output more statistics such as the fitness value of everyone.
 
-The default output of this script includes population size, number of segregation sites, average number of segregation sites per individual, average frequency of all mutants, average and mean fitness of individuals. You can modify the script to get more output. For example, you can use operator @@infoEval@@ with @@output='>>fitness.txt'"@@ to output fitness values for all individuals to a file. Please refer to the simuPOP user's guide on how to use these parameters.
+The default output of this script includes population size, number of segregation sites, average number of segregation sites per individual, average frequency of all mutants, average and mean fitness of individuals. You can modify the script to get more output. For example, you can use operator `infoEval` with `output='>>fitness.txt'"` to output fitness values for all individuals to a file. Please refer to the simuPOP user's guide on how to use these parameters.
 
 ## References
 

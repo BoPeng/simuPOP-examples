@@ -36,7 +36,7 @@ The file simuGWAS.zip contains several files, including:
 
 :'''[[Attach:example2.py | example2.py]]''': This example simulates a case-control sample using a gene environment interaction model. 
 
-->%red%note:%% This example requires a marker list file from Illumina. If you do not have this file, you can get a similar file from http://www.openbioinformatics.org/gengen/gengen_download.html. You should then change line 46 of example 2 from @@ann = open('HumanHap550v3_A.lst')@@ to @@ann = open('hh550v3_snptable.txt')@@, and line 49 from @@names.append(line.split(',')[1])@@ to @@names.append(line.split('\t')[0])@@.
+->%red%note:%% This example requires a marker list file from Illumina. If you do not have this file, you can get a similar file from http://www.openbioinformatics.org/gengen/gengen_download.html. You should then change line 46 of example 2 from `ann = open('HumanHap550v3_A.lst')` to `ann = open('hh550v3_snptable.txt')`, and line 49 from `names.append(line.split(',')[1])` to `names.append(line.split('\t')[0])`.
 
 :'''[[Attach:example3.py | example3.py]]''': This example simulates recent and remote selective sweep and draw trio samples
 
@@ -63,9 +63,9 @@ Attach:simuGWAS.jpg
 
 !!!! Using command line parameters
 
-If you need to run these scripts in batch mode, you can use parameter @@--gui=False@@ to disable GUI and use command line options to input parameters. If some of the parameters are not specified, your will be prompted to input them. Please use 
+If you need to run these scripts in batch mode, you can use parameter `--gui=False` to disable GUI and use command line options to input parameters. If some of the parameters are not specified, your will be prompted to input them. Please use 
 
-->@@> simuGWAS.py -h@@
+->`> simuGWAS.py -h`
 
 to check what options are available.
 

@@ -30,11 +30,11 @@ Because this script is written in Python and uses simuPOP for its graphical user
 * Download and install %red%simuPOP 1.0.3%% or 1.0.6 or later following the installation instruction [[http://simupop.sourceforge.net/Main/Download | here]].
 * Download caseControlPower.py from this page and save it to a directory.
 * Open a """command window""", go to the directory with caseControlPower.py, type
--->@@> caseControlPower.py@@
+-->`> caseControlPower.py`
 ->to start a graphical user interface, or use
--->@@> caseControlPower.py --gui=False@@
+-->`> caseControlPower.py --gui=False`
 ->to use interactive user input. You can use
--->@@> caseControlPower.py --help@@
+-->`> caseControlPower.py --help`
 ->to check allowed command line options. You can also import this script as a module in another script and use the functions directly.
 
 Please feel free to [[mailto:bpeng@mdanderson.org | email me]] if you have any question about this script.

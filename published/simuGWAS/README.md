@@ -78,7 +78,7 @@ All these scripts could be imported from another script. Because it is clear to 
 !!!!%block class=messagehead%13 June 2011
 
 >>message<<
-!20:44 by '''[[~Matt Johnson]]'''!
+!20:44 by '''[~Matt Johnson](~Matt Johnson)'''!
 It should be noted that to run the script example2.py as provided, the file HumanHap550v3_A.lst (list of all Illumina markers) is needed. I downloaded what I think is a similar file from here: http://www.openbioinformatics.org/gengen/gengen_download.html
 
 I had to change the file to be comma delimited rather than tabs. This list of Illumina markers seems to be different, because 'rs4491689' is the 2944th marker on chromosome 2, and the original example2.py script only grabs 2000 markers on chromosome 2. Once I updated this to grab 3000 markers from each chromosome, example2.py executed correctly.
@@ -90,7 +90,7 @@ I can upload a corrected version if it's desired.
 !!!!%block class=messagehead%09 August 2013
 
 >>message<<
-!11:18 by '''[[~Leslie Foldager]]'''!
+!11:18 by '''[~Leslie Foldager](~Leslie Foldager)'''!
 Note that in simuGWAS.py lines 227-229 it is indicated that an exponential expansion model is used. But the paper (BMC Bioinformatics 2010) says that linear expansion was used and indeed the script produces a linear growth. The function is also identical to the 'linearExpansion' function in the source code 5.6 on page 125 in the book by Peng, Kimmel and Amos (ISBN: 9780470503485).
 
 The reason for choosing 50000 as the default final population size is a bit unclear to me. In simuGWAS.py it is noted that this "is the recommended value when all HapMap populations are used (60+60+90)*200". Yes there are 60+60+90 unrelated subjects in HapMap2 but the examples in the paper use HapMap3 (993 unrelated individuals) and furthermore (60+60+90)*200=42000 ... so why 50000? Choosing 50000 actually results in an expected effective population size of 12657 (according to the output that I got from running the script) which is probably a reasonable size for a present day population and very close to the number 12658 mentioned in the paper and book. So the 10^5 noted in the paper and book (the book actually says 105 but that must be a typo) should probably have been 50000!?

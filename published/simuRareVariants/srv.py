@@ -654,6 +654,9 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
         pop.dvars().selCoef = 0
     else:
         pop.dvars().selCoef = collector.selCoef
+    # re-save the file with the added selCoef
+    if popFile[-1] == -1:
+        pop.save(popFile[0])
     #
     if logger:
         logger.info('Population simulation takes %.2f seconds' % (time.clock() - startTime))

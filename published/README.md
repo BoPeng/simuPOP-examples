@@ -1,4 +1,4 @@
-(:title Complete scripts for various applications:)
+#  Complete scripts for various applications
 
 The following scripts were originally distributed with simuPOP in the `scripts` directory. They have been used for different research topics and can serve as examples on how to use simuPOP in real-world applications. Note that the documentations may be incorrect and there may be bugs in the script. %red%Please feel free to [contact me](mailto:bpeng@mdanderson.org) for any problem you have with these scripts.%% 
 

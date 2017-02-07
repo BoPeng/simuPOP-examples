@@ -1,4 +1,4 @@
-(:title simuPOP Examples:)
+#  simuPOP Examples
 
 ## Demonstration of basic population genetics models
 

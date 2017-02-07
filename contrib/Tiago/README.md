@@ -1,4 +1,4 @@
-(:title Landscape genetics example:)
+#  Landscape genetics example
 
 
 The example attached provides a landscape genetics simulation, the main points are:

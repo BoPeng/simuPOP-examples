@@ -1,4 +1,4 @@
-(:title simulation for the Common Disease - Common Variant Hypothesis:)
+#  simulation for the Common Disease - Common Variant Hypothesis
 
 
 

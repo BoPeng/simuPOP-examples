@@ -1,4 +1,4 @@
-(:title A power calculator for case control association studies of samples with  known family histories:)
+#  A power calculator for case control association studies of samples with  known family histories
 
 %red%Due to a regression bug in simuPOP 1.0.4 and 1.0.5, please use simuPOP 1.0.3 or simuPOP 1.0.6 or later to execute this script.%%
 

@@ -1,4 +1,4 @@
-(:title Forward-Time Population Genetics Simulations: Methods, Implementation, and Applications:)
+#  Forward-Time Population Genetics Simulations: Methods, Implementation, and Applications
 
 
 

@@ -1,4 +1,4 @@
-(:title Simulation of samples for Genome-Wide Association Studies:)
+#  Simulation of samples for Genome-Wide Association Studies
 
 
 ## Introduction

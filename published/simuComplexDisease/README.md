@@ -1,4 +1,4 @@
-(:title Simulation of human genetic diseases with selection:)
+#  Simulation of human genetic diseases with selection
 
 
 

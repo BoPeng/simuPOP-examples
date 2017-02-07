@@ -25,286 +25,9 @@ simuOpt.setOptions(alleleType='long', optimized=True, quiet=True, version='1.0.5
 
 import simuPOP as sim
 from simuPOP.utils import ProgressBar, migrIslandRates
-from simuPOP.sandbox import RevertFixedSites, revertFixedSites, MutSpaceSelector, MutSpaceMutator, MutSpaceRecombinator
+from simuPOP import MutSpaceRevertFixedSites, revertFixedSites, MutSpaceSelector, MutSpaceMutator, MutSpaceRecombinator
 
 import os, sys, logging, math, time
-
-options = [
-    {'separator': 'Genetic structure'},
-    {'name': 'regions',
-     'default': ['chr1:1..50000'],
-     'label': 'Regions',
-     'description': '''A region (in basepair) means a piece of chromosome in
-        which mutations can happen. A region should be expressed as chrXX:YYYY..ZZZZ
-        where XX is chromosome number, YYYY is the starting position in basepair and
-        ZZZZ is the ending position in basepair. The starting position should be at
-        least one. If multiple regions are specified as a list of regions, they
-        are assumed to be unlinked and will segregate independently even if they are
-        on the same chromosome. If chromosome is 'chrX' or 'chrY', they will be
-        transmitted as sex chromosomes. The current implementation only allows
-        one region on a sex chromosome.''',
-     'type': (list, tuple),
-    },
-    {'separator': 'Initial population and demographic model'},
-    {'name': 'initPop',
-     'default': '',
-     'label': 'Initial population',
-     'description': '''Name of an initial population. If this file exists, it
-        will be loaded and the evolution will start from this population, instead
-        of a blank population.
-     ''',
-     'type': 'filename',
-     'validate': simuOpt.valueOneOf('', simuOpt.valueValidFile()),
-    },
-    {'name': 'N',
-     'default': [8100, 8100, 7900, 900000],
-     'label': 'Population Sizes',
-     'description': '''Assuming a n stage demographic model, this parameter specifies
-        population sizes at the beginning of evolution and at the end of each stage.
-        N_0,...,N_n. If N_i < N_i+1, an exponential population expansion model will be
-        used to expand population from size N_i to N_i+1. If N_i < N_i+1, an instant
-        population reduction will reduce population size to N_i+1. For example
-        | N=(1000,1000,100,1000)
-        |simulates a three stage demographic model where a population of constant size
-        goes through a bottleneck of 100 indiviudals, and then expands exponentially to
-        a size of 1000.''',
-     'type': 'integers',
-    },
-    {'name': 'G',
-     'default': [5000, 10, 370],
-     'label': 'Numbers of generations at each stage',
-     'description': '''Numbers of generations of each stage of a n stage demographic model.
-        This parameter should have n elements, in comparison to n+1 elements for parameter
-        N.''',
-     'type': 'integers',
-     'validate': 'len(G) + 1 == len(N)'
-    },
-    {'name': 'splitTo',
-     'default': [1],
-     'type': 'numbers',
-     'label': 'Proportions of subpopulation sizes',
-     'description': '''This parameter, if specified, should be a list of proportions that
-        add up to 1. The length of this list specifies the number of subpopulations to
-        split.''',
-    'validate': 'sum(splitTo) == 1',
-    },
-    {'name': 'splitAt',
-     'default': 0,
-     'type': 'integer',
-     'label': 'Split population at generation',
-     'description': '''Split the population at specified generation according to specified
-        proportions.''',
-    },
-    {'separator': 'Genetic forces'},
-    {'name': 'mutationModel',
-     'default': 'finite_sites',
-     'label': 'Mutation model',
-     'type': ('chooseOneOf', ['infinite_sites', 'finite_sites']),
-     'description': '''Mutation model. The default mutation model is a finite-site
-        model that allows mutations at any locus. If a mutant is mutated, it will be
-        mutated to a wildtype allele. Alternatively, an infinite-sites model can be
-        simulated where new mutants must happen at loci without existing mutant,
-        unless no vacant loci is available (a warning message will be printed 
-        in that case).''',
-    },
-    {'name': 'mu',
-     'default': 1.8e-8,
-     'label': 'Mutation rate',
-     'description': '''Mutation rate''',
-     'type': 'number',
-     'validator': simuOpt.valueBetween(0., 1.),
-    },
-    {'name': 'selModel',
-     'default': 'multiplicative',
-     'label': 'Multi-locus selection model',
-     'type': ('chooseOneOf', ('multiplicative', 'additive', 'exponential')),
-     'description': '''Multi-locus selection model, namely how to obtain an
-        overall individual fitness after obtaining fitness values at all loci.
-        This script supports three models:
-        |  multiplicative: prod (f_i) Product of individual fitness.
-        |  additive: max(0, 1 - sum(1-f_i)) One minus the combined selection 
-            deficiencies.
-        |  exponential: exp(sum(1-f_i)) Exponential of combined selection
-            deficiencies.
-        |Note that f_i can be equal to or greater than zero, which represents
-        neutral loci, or loci under positive selection.''',
-    },
-    {'name': 'selDist',
-     'default': 'constant',
-     'label': 'Distribution of selection coefficient',
-     'type': ('chooseOneOf', ['constant'] + ['gamma%d' % x for x in range(1,4)] + ['mixed_gamma', 'mixed_gamma1']),
-     'description': '''Distribution of selection coefficient for new mutants.
-        Each distribution specifies s (selection coefficient) and h (dominance
-        coefficient, default to 0.5 for additivity) that assign fitness values
-        1, 1-hs and 1-s for genotypes AA (wildtype), Aa and aa, respectively.
-        Note that positive s is used for negative selection so negative s is
-        needed to specify positive selection. Note that we use 2k in the default
-        distribution of Gamma distributions because theoretical estimates of 
-        s is for each mutant with 1-2s as fitness value for genotype aa in
-        our model. This script currently support the following distributions:
-        |* constant: A single selection coefficient that gives each mutant a
-            constant value s. The default parameter for this model is 
-            0.01, 0.5. You can set selCoef to 0 to simulate neutral cases or a
-            negative value for positive selection.
-        |* gamma1: A basic gamma distribution assuming a constant
-            population size model (Eyre-Walker et al, 2006). The default
-            parameters for this model is Pr(s=x)=Gamma(0.23, 0.185*2), with h=0.5.
-            A scaling parameter 0.185*2 is used because s in our simulation
-            accounts for 2s for Eyre-Walker et al.
-        |* gamma2: A gamma distribution assuming a two-epoch population
-            size change model for African population (Boyko et al, 2008). The
-            default parameters for this model is Pr(s=x)=Gamma(0.184, 0.160*2),
-            with h=0.5.
-        |* gamma3: A gamma distribution (for s) assuming a complex bottleneck
-            model for European population (Boyko et al, 2008). The default
-            parameters for this model is Pr(s=x)=Gamma(0.206, 0.146*2) with h=0.5.
-        |* mixed_gamma: Parameter of this model should be a list of
-            (a, p, k, theta, h, l, u) where a is the probability of having s=p (neutral
-            or adptive sites), k, theta are the parameter of a gamma distribution
-            Recomended parameter is (0.0186, 0.0001, 0.184, 0.160*2, 0.5, 0.0001, 0.1) for
-            P(s=0.0001)=0.0186 and P(s=x)=(1-0.0186)*Gamma(0.184,0.160*2), with values
-            outside of (l,u) being discarded.
-        |* mixed_gamma1: A gamma distribution assuming a single bottleneck followed by
-            exponential expansion for European population (Kyrukov et al, 2009). 
-            The default parameters for this model is Pr(s=x)=Gamma(0.562341, 0.01)
-            with h=0.5. Tails of this distribution (above s=0.1 and below s=0.00001)
-            have being replaced by s=1 and s=0 respectively. If you would like to 
-            reset some of the parameters, you can set (a, p, k, theta, h, l, u)
-            to parameter selCoef where a is the probability of having selection 
-            coefficient = p (usually p = 0 for neutral or < 0 for protective), 
-            l/u are lower/upper bounds for selection coefficients, creating truncated 
-            gamma distribution. k, theta are the parameters of the gamma distribution.
-        |If you would like to define your own selection model, please define
-        your own function and pass it to parameter selDist of function
-        simuRareVariants in the script.''',
-    },
-    {'name': 'selCoef',
-     'default': None,
-     'type': [type(None), type(()), type([])],
-     'label': 'Customized selection coefficient',
-     'description': '''Selection coefficient with its meaning determined by
-        parameter selDist. If None is given, the default parameter for the
-        selected distribution will be used. For example, parameter (0.001, 0)
-        for a constant model defines a recessive model with fixed s. Note that
-        a parameter of (k, theta, h) is needed for gamma distributions and
-        a parameter of (p, a, k, theta, h, l, v) is needed for mixed gamma
-        distributions.''',
-    },
-    {'name': 'recRate',
-     'default': 0,
-     'label': 'Recombination rate',
-     'type': 'number',
-     'description': '''Recombination rate per base pair. If r times loci distance
-        if greater than 0.5, a rate of 0.5 will be used.''',
-    },
-    {'name': 'migrRate',
-     'default': 0,
-     'label': 'Migration rate',
-     'type': 'number',
-     'description': '''Migration rate to migrate individuals between subpoulations
-        after the population is split into several subpopulations. An island model
-        is used.''',
-     'validator': simuOpt.valueBetween(0, 1),
-    },
-    {'separator': 'Manual introduction of mutants'},
-    {'name': 'extMutantFile',
-     'default': '',
-     'label': 'Add mutants from population',
-     'description': '''If a population is given, mutants from this population
-        will be added to the population at specified generation. Only
-        loci that are within the specified regions will be inserted. This
-        population will be resized to population size at addMutantsAt
-        before it is merged to the simulated population. This population is
-        usually prepared using selectMarkers.py, using HapMap populations loaded
-        using scripts loadHapMap2.py and loadHapMap3.py. These scripts are
-        available from the simuPOP cookbook.''',
-     'type': 'filename',
-     'validate': simuOpt.valueOneOf('', simuOpt.valueValidFile()),
-    },
-    {'name': 'addMutantsAt',
-     'default': 0,
-     'label': 'Add mutants at generation',
-     'description': '''Generation number at which mutants from an external
-        population will be inserted to the evolving population.''',
-     'type': 'integer',
-    },
-    {'separator': 'Output'},
-    {'name': 'steps',
-     'default': [100],
-     'label': 'Frequency of statistic output',
-     'description': '''Calculate and output statistics at intervals of specified
-        number of generations. A single number or a list of numbers for each stage
-        can be specified. If left unspecified, statistics at the beginning of
-        each stage will be printed.''',
-     'type': 'integers',
-    },
-    {'name': 'statFile',
-     'default': '',
-     'label': 'Output statistics to',
-     'type': str,
-     'description': '''File to output statistics. Default to standard output.''',
-    },
-    {'name': 'popFile',
-     'default': 'output.pop',
-     'label': 'Save population during evolution',
-     'description': '''Filename to which the evolving population will be saved
-        in simuPOP format. The default value of this parameter is 'output.pop',
-        which saves the population at the end of the evolution to file 'output.pop'.
-        Optionally, one or more generation numbers can be provided,
-        in which case, the filename should be specified as an expression. For
-        example, parameter ('!"output_%d.pop" % gen', (5000, -1)) saves the
-        evolving population at the end of generation 5000, and the last generation.
-        Please check the simuPOP user's guide for the use of expression in 
-        operator savePopulation.''',
-      'validator': 'type(popFile) == str or len(popFile) == 2',
-    },
-    {'name': 'markerFile',
-     'default': 'output.map',
-     'label': 'Save marker information to',
-     'type': str,
-     'description': '''Filename to which the marker information, including
-        marker name (reg+index), chromosome, location, allele frequency and
-        selection coefficient are saved. Monomorphic markers are ignored.'''
-    },
-    {'name': 'mutantFile',
-     'default': 'output.mut',
-     'label': 'Save mutants to',
-     'type': str,
-     'description': '''Filename to which the mutants are outputed. The file
-        will be saved in the format of 
-        |  ind_id mut1 mut2 ...
-        |where ind_id is the index of individual (1, 2, ...), mut1 and mut2 are
-        locations of mutants. Haplotypes for different regions and homologous
-        chromosomes are saved in different lines in the order of 
-        | reg1_ploidy1
-        | reg1_ploidy2
-        | reg2_ploidy1
-        | reg2_ploidy2
-        | ...
-        ''',
-    },
-    {'name': 'genotypeFile',
-     'default': '',
-     'label': 'Save genotype (in .ped format) to',
-     'type': str,
-     'description': '''Filename to which the genotypes of all individuals are
-        saved. The file will be saved in the format of
-        |    famid id fa mo sex aff loc1_a1 loc1_a2 loc2_a1 loc2_a2 ...
-        |where famid is 1, 2, 3, ... id is always 1, fa, mo is always 0.
-        Wildtype and mutant alleles are denoted by 0 and 1 respectively. This
-        option is turned off by default because this format is not efficient in
-        storing a small number of mutants.'''
-    },
-    {'name': 'verbose',
-     'default': 1,
-     'type': int,
-     'validator': simuOpt.valueBetween(0, 2),
-     'description': '''0 for quiet, 1 for regular output, 2 for debug output.
-        In the debug output, a file 'mutations.lst' will be saved with all 
-        mutation events. This option is not visible from gui.''',
-    },
-]
-
 
 class NumSegregationSites(sim.PyOperator):
     '''A Python operator to count the number of segregation sites (number of
@@ -882,7 +605,7 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
                     sim.PyOperator(func=addMutantsFrom, param=(extMutantFile, regions, logger)),
                 ], at = addMutantsAt),
             # revert alleles at fixed loci to wildtype
-            RevertFixedSites(),
+            MutSpaceRevertFixedSites(),
             # mutate in a region at rate mu, if verbose > 2, save mutation events to a file
             MutSpaceMutator(mu, ranges, {'finite_sites':1, 'infinite_sites':2}[mutationModel],
                 output='' if verbose < 2 else '>>mutations.lst'),
@@ -910,7 +633,7 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
         ],
         finalOps=[
             # revert fixed sites so that the final population does not have fixed sites
-            RevertFixedSites(),
+            MutSpaceRevertFixedSites(),
             sim.IfElse(verbose > 0, ifOps=[
                 # statistics after evolution
                 sim.Stat(popSize=True),
@@ -950,14 +673,254 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
 
 
 if __name__ == '__main__':
-    pars = simuOpt.Params(options, 'A simulator of rare variants.', __doc__)
-    if not pars.getParam():
-        sys.exit(1)
+    import argparse
+    args = argparse.ArgumentParser(description='A simulator of rare variants.')
+    args.add_argument("--regions",
+        default=['chr1:1..50000'],
+        nargs="*",
+        help="""Regions
+            A region (in basepair) means a piece of chromosome in
+            which mutations can happen. A region should be expressed as chrXX:YYYY..ZZZZ
+            where XX is chromosome number, YYYY is the starting position in basepair and
+            ZZZZ is the ending position in basepair. The starting position should be at
+            least one. If multiple regions are specified as a list of regions, they
+            are assumed to be unlinked and will segregate independently even if they are
+            on the same chromosome. If chromosome is 'chrX' or 'chrY', they will be
+            transmitted as sex chromosomes. The current implementation only allows
+            one region on a sex chromosome.""")
+    args.add_argument("--initPop",
+        default='',
+        help="""Initial population
+            Name of an initial population. If this file exists, it
+            will be loaded and the evolution will start from this population, instead
+            of a blank population.
+         """)
+    args.add_argument("--N",
+        default=[8100, 8100, 7900, 900000],
+        nargs='*',
+        help="""Population Sizes
+            Assuming a n stage demographic model, this parameter specifies
+            population sizes at the beginning of evolution and at the end of each stage.
+            N_0,...,N_n. If N_i < N_i+1, an exponential population expansion model will be
+            used to expand population from size N_i to N_i+1. If N_i < N_i+1, an instant
+            population reduction will reduce population size to N_i+1. For example
+            | N=(1000,1000,100,1000)
+            |simulates a three stage demographic model where a population of constant size
+            goes through a bottleneck of 100 indiviudals, and then expands exponentially to
+            a size of 1000.""")
+    args.add_argument("--G",
+        default=[5000, 10, 370],
+        nargs='*',
+        help="""Numbers of generations at each stage
+            Numbers of generations of each stage of a n stage demographic model.
+            This parameter should have n elements, in comparison to n+1 elements for parameter
+            N.""")
+    args.add_argument("--splitTo",
+        default=[1],
+        type=float,
+        nargs='*',
+        help="""Proportions of subpopulation sizes
+            This parameter, if specified, should be a list of proportions that
+            add up to 1. The length of this list specifies the number of subpopulations to
+            split.""")
+    args.add_argument("--splitAt",
+        default=0,
+        type=int,
+        help="""Split population at generation
+            Split the population at specified generation according to specified
+            proportions.""")
+    args.add_argument("--mutationModel",
+        default='finite_sites',
+        nargs="*",
+        help="""Mutation model
+            Mutation model. The default mutation model is a finite-site
+            model that allows mutations at any locus. If a mutant is mutated, it will be
+            mutated to a wildtype allele. Alternatively, an infinite-sites model can be
+            simulated where new mutants must happen at loci without existing mutant,
+            unless no vacant loci is available (a warning message will be printed 
+            in that case).""")
+    args.add_argument("--mu",
+        default=1.8e-08,
+        type=float,
+        nargs='*',
+        help="""Mutation rate
+            Mutation rate""")
+    args.add_argument("--selModel",
+        default='multiplicative',
+        nargs="*",
+        help="""Multi-locus selection model
+            Multi-locus selection model, namely how to obtain an
+            overall individual fitness after obtaining fitness values at all loci.
+            This script supports three models:
+            |  multiplicative: prod (f_i) Product of individual fitness.
+            |  additive: max(0, 1 - sum(1-f_i)) One minus the combined selection 
+                deficiencies.
+            |  exponential: exp(sum(1-f_i)) Exponential of combined selection
+                deficiencies.
+            |Note that f_i can be equal to or greater than zero, which represents
+            neutral loci, or loci under positive selection.""")
+    args.add_argument("--selDist",
+        default='constant',
+        help="""Distribution of selection coefficient
+            Distribution of selection coefficient for new mutants.
+            Each distribution specifies s (selection coefficient) and h (dominance
+            coefficient, default to 0.5 for additivity) that assign fitness values
+            1, 1-hs and 1-s for genotypes AA (wildtype), Aa and aa, respectively.
+            Note that positive s is used for negative selection so negative s is
+            needed to specify positive selection. Note that we use 2k in the default
+            distribution of Gamma distributions because theoretical estimates of 
+            s is for each mutant with 1-2s as fitness value for genotype aa in
+            our model. This script currently support the following distributions:
+            |* constant: A single selection coefficient that gives each mutant a
+                constant value s. The default parameter for this model is 
+                0.01, 0.5. You can set selCoef to 0 to simulate neutral cases or a
+                negative value for positive selection.
+            |* gamma1: A basic gamma distribution assuming a constant
+                population size model (Eyre-Walker et al, 2006). The default
+                parameters for this model is Pr(s=x)=Gamma(0.23, 0.185*2), with h=0.5.
+                A scaling parameter 0.185*2 is used because s in our simulation
+                accounts for 2s for Eyre-Walker et al.
+            |* gamma2: A gamma distribution assuming a two-epoch population
+                size change model for African population (Boyko et al, 2008). The
+                default parameters for this model is Pr(s=x)=Gamma(0.184, 0.160*2),
+                with h=0.5.
+            |* gamma3: A gamma distribution (for s) assuming a complex bottleneck
+                model for European population (Boyko et al, 2008). The default
+                parameters for this model is Pr(s=x)=Gamma(0.206, 0.146*2) with h=0.5.
+            |* mixed_gamma: Parameter of this model should be a list of
+                (a, p, k, theta, h, l, u) where a is the probability of having s=p (neutral
+                or adptive sites), k, theta are the parameter of a gamma distribution
+                Recomended parameter is (0.0186, 0.0001, 0.184, 0.160*2, 0.5, 0.0001, 0.1) for
+                P(s=0.0001)=0.0186 and P(s=x)=(1-0.0186)*Gamma(0.184,0.160*2), with values
+                outside of (l,u) being discarded.
+            |* mixed_gamma1: A gamma distribution assuming a single bottleneck followed by
+                exponential expansion for European population (Kyrukov et al, 2009). 
+                The default parameters for this model is Pr(s=x)=Gamma(0.562341, 0.01)
+                with h=0.5. Tails of this distribution (above s=0.1 and below s=0.00001)
+                have being replaced by s=1 and s=0 respectively. If you would like to 
+                reset some of the parameters, you can set (a, p, k, theta, h, l, u)
+                to parameter selCoef where a is the probability of having selection 
+                coefficient = p (usually p = 0 for neutral or < 0 for protective), 
+                l/u are lower/upper bounds for selection coefficients, creating truncated 
+                gamma distribution. k, theta are the parameters of the gamma distribution.
+            |If you would like to define your own selection model, please define
+            your own function and pass it to parameter selDist of function
+            simuRareVariants in the script.""")
+    args.add_argument("--selCoef",
+        default=None,
+        nargs="*",
+        help="""Customized selection coefficient
+            Selection coefficient with its meaning determined by
+            parameter selDist. If None is given, the default parameter for the
+            selected distribution will be used. For example, parameter (0.001, 0)
+            for a constant model defines a recessive model with fixed s. Note that
+            a parameter of (k, theta, h) is needed for gamma distributions and
+            a parameter of (p, a, k, theta, h, l, v) is needed for mixed gamma
+            distributions.""")
+    args.add_argument("--recRate",
+        default=0,
+        type=float,
+        help="""Recombination rate
+            Recombination rate per base pair. If r times loci distance
+            if greater than 0.5, a rate of 0.5 will be used.""")
+    args.add_argument("--migrRate",
+        default=0,
+        type=float,
+        help="""Migration rate
+            Migration rate to migrate individuals between subpoulations
+            after the population is split into several subpopulations. An island model
+            is used.""")
+    args.add_argument("--extMutantFile",
+        default='',
+        help="""Add mutants from population
+            If a population is given, mutants from this population
+            will be added to the population at specified generation. Only
+            loci that are within the specified regions will be inserted. This
+            population will be resized to population size at addMutantsAt
+            before it is merged to the simulated population. This population is
+            usually prepared using selectMarkers.py, using HapMap populations loaded
+            using scripts loadHapMap2.py and loadHapMap3.py. These scripts are
+            available from the simuPOP cookbook.""")
+    args.add_argument("--addMutantsAt",
+        default=0,
+        type=int,
+        help="""Add mutants at generation
+            Generation number at which mutants from an external
+            population will be inserted to the evolving population.""")
+    args.add_argument("--steps",
+        default=[100],
+        nargs='*',
+        help="""Frequency of statistic output
+            Calculate and output statistics at intervals of specified
+            number of generations. A single number or a list of numbers for each stage
+            can be specified. If left unspecified, statistics at the beginning of
+            each stage will be printed.""")
+    args.add_argument("--statFile",
+        default='',
+        type=str,
+        help="""Output statistics to
+            File to output statistics. Default to standard output.""")
+    args.add_argument("--popFile",
+        default='output.pop',
+        type=str,
+        help="""Save population during evolution
+            Filename to which the evolving population will be saved
+            in simuPOP format. The default value of this parameter is 'output.pop',
+            which saves the population at the end of the evolution to file 'output.pop'.
+            Optionally, one or more generation numbers can be provided,
+            in which case, the filename should be specified as an expression. For
+            example, parameter ('!"output_%d.pop" % gen', (5000, -1)) saves the
+            evolving population at the end of generation 5000, and the last generation.
+            Please check the simuPOP user's guide for the use of expression in 
+            operator savePopulation.""")
+    args.add_argument("--markerFile",
+        default='output.map',
+        type=str,
+        help="""Save marker information to
+            Filename to which the marker information, including
+            marker name (reg+index), chromosome, location, allele frequency and
+            selection coefficient are saved. Monomorphic markers are ignored.""")
+    args.add_argument("--mutantFile",
+        default='output.mut',
+        type=str,
+        help="""Save mutants to
+            Filename to which the mutants are outputed. The file
+            will be saved in the format of 
+            |  ind_id mut1 mut2 ...
+            |where ind_id is the index of individual (1, 2, ...), mut1 and mut2 are
+            locations of mutants. Haplotypes for different regions and homologous
+            chromosomes are saved in different lines in the order of 
+            | reg1_ploidy1
+            | reg1_ploidy2
+            | reg2_ploidy1
+            | reg2_ploidy2
+            | ...
+            """)
+    args.add_argument("--genotypeFile",
+        default='',
+        type=str,
+        help="""Save genotype (in .ped format) to
+            Filename to which the genotypes of all individuals are
+            saved. The file will be saved in the format of
+            |    famid id fa mo sex aff loc1_a1 loc1_a2 loc2_a1 loc2_a2 ...
+            |where famid is 1, 2, 3, ... id is always 1, fa, mo is always 0.
+            Wildtype and mutant alleles are denoted by 0 and 1 respectively. This
+            option is turned off by default because this format is not efficient in
+            storing a small number of mutants.""")
+    args.add_argument("--verbose",
+        default=1,
+        type=int,
+        help="""
+            0 for quiet, 1 for regular output, 2 for debug output.
+            In the debug output, a file 'mutations.lst' will be saved with all 
+            mutation events. This option is not visible from gui.""")
+    args = args.parse_args()
+
     # if you change level to logging.DEBUG, a lot of debug information, including
     # location and generation of mutants will be outputed. You can also use parameter
     # filename of function basicConfig to output log to a file.
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('simuRareVariants')
-    simuRareVariants(logger=logger, **pars.asDict())
+    simuRareVariants(logger=logger, **vars(args))
 
 

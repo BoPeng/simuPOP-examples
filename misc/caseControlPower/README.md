@@ -4,12 +4,12 @@
 
 %rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:caseControlPower.py | http://simupop.sourceforge.net/images/download.jpg]]|caseControlPower.py
 
-!!! ChangeLog
+### ChangeLog
 
 * Jan, 30, 2012: Modify the 'Additive_AA' model to use an alternative definition of detectable relative risk. Use a slightly different power analysis formula.
 
 
-!!! Introduction
+### Introduction
 This program is a power calculator for case-control association studies. Compared
 to other power calculators, this program is unique in that it assumes that we
 know the family history of cases and/or controls. Because cases with known family
@@ -22,7 +22,7 @@ Please cite the following paper if you have used this script for your analysis:
 ->Bo Peng, Biao Li, Younghun Han and Christopher I. Amos
 ->LINK: http://www.springerlink.com/content/y85k314765524153/
 
-!!! Installation
+### Installation
 
 Because this script is written in Python and uses simuPOP for its graphical user interface, you will need to install Python (2.4 or higher, but not Python 3) and [[http://simupop.sf.net | simuPOP]] in order to use it. More specifically, you need to 
 
@@ -39,7 +39,7 @@ Because this script is written in Python and uses simuPOP for its graphical user
 
 Please feel free to [[mailto:bpeng@mdanderson.org | email me]] if you have any question about this script.
 
-!!! How to use this script
+### How to use this script
 Our analysis assumes a disease predisposing locus and a marker locus that are
 both in Hardy Weinberg Equilibrium. To calculate the power to detect a 
 particular disease, you will need to disease mode (addition, recessive etc),
@@ -86,7 +86,7 @@ number of analyses easily and use a logging object to dump important internal
 steps. Please refer to script [[Attach:PowerAnalysis.py | PowerAnalysis.py]] for an example. That script
 loads caseControlPower.py and performs all calculates for Peng et al, 2010.
 
-!!! Reference to command line parameters
+### Reference to command line parameters
 
 python caseControlPower.py -h
 A power calculator for case control association studies with know family

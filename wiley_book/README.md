@@ -4,7 +4,7 @@
 
 This page contains all examples in a book ''Forward-Time Population Genetics Simulations: Methods, Implementation, and Applications'' by Bo Peng (author of simuPOP), Marek Kimmel and Christopher I Amos.
 
-!! Chapter 2: Simulation of population genetics models
+## Chapter 2: Simulation of population genetics models
 * Decay of homozygosity due to random genetic drift [[http://simupop.sourceforge.net/wileyBook/ch3_WF_Ht.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_WF_Ht.log|@@[log]@@]]
 * Absorption time and time to fixation [[http://simupop.sourceforge.net/wileyBook/ch3_WF_persistence.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_WF_persistence.log|@@[log]@@]]
 ->%blue%Note%%: This example tracks the frequency of allele 0, although in most cases, we interpret allele 0 as wild type allele, and are interested in tracking the frequency of mutant allele 1.
@@ -19,16 +19,16 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 * A two-locus symmetric viability model of natural selection [[http://simupop.sourceforge.net/wileyBook/ch3_viabilityModel.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_viabilityModel.log|@@[log]@@]]
 * Decay of homozygosity due to random genetic drift [[http://simupop.sourceforge.net/wileyBook/ch3_WF_Ht.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_WF_Ht.log|@@[log]@@]]
 * Absorption time and time to fixation [[http://simupop.sourceforge.net/wileyBook/ch3_WF_persistence.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_WF_persistence.log|@@[log]@@]]
-!! Chapter 3: Ascertainment bias in population genetics
+## Chapter 3: Ascertainment bias in population genetics
 * Script to simulate the evolution of microsatellite marker using a scaling technique [[http://simupop.sourceforge.net/wileyBook/ch4_scaling.py|@@[source]@@]] 
-!! Chapter 4: Observing properties of evolving populations
+## Chapter 4: Observing properties of evolving populations
 * Evolve a population subject to mutation and selection [[http://simupop.sourceforge.net/wileyBook/ch5_reichEvolve.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch5_reichEvolve.log|@@[log]@@]]
 * A Python class that defines instant and exponential population expansion models [[http://simupop.sourceforge.net/wileyBook/reichDemo.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/reichDemo.log|@@[log]@@]]
 * A self-defined operator to calculate effective number of alleles [[http://simupop.sourceforge.net/wileyBook/reichStat.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/reichStat.log|@@[log]@@]]
 * A demographic model with population split and rapid population expansion [[http://simupop.sourceforge.net/wileyBook/ch3_demography.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch3_demography.log|@@[log]@@]]
 * Simulation of multiple independent single-locus selection models [[http://simupop.sourceforge.net/wileyBook/ch5_mlSelector.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch5_mlSelector.log|@@[log]@@]]
 * A Python function to calculate effective number of alleles [[http://simupop.sourceforge.net/wileyBook/ch5_reichStatFunc.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch5_reichStatFunc.log|@@[log]@@]]
-!! Chapter 5: Simulating populations with complex human diseases
+## Chapter 5: Simulating populations with complex human diseases
 * Simulating allele frequency trajectory backward in time. [[http://simupop.sourceforge.net/wileyBook/ch6_backwardTrajectory.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_backwardTrajectory.log|@@[log]@@]]
 * Simulation of a disease model with GxG and GxE interactions [[http://simupop.sourceforge.net/wileyBook/ch6_example2.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_example2.log|@@[log]@@]]
 * Generation of trio samples from simulated population [[http://simupop.sourceforge.net/wileyBook/ch6_example3.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_example3.log|@@[log]@@]]
@@ -41,7 +41,7 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 * Generating case control samples [[http://simupop.sourceforge.net/wileyBook/ch6_genCaseCtrl.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_genCaseCtrl.log|@@[log]@@]]
 * Straightforward simulation of the introduction of a disease allele [[http://simupop.sourceforge.net/wileyBook/ch6_introduction.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_introduction.log|@@[log]@@]]
 * Reintroduction of a disease allele when it is lost [[http://simupop.sourceforge.net/wileyBook/ch6_reintroduction.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch6_reintroduction.log|@@[log]@@]]
-!! Chapter 6: Nonrandom mating and its applications
+## Chapter 6: Nonrandom mating and its applications
 * Simulating an admixed population with recorded ancestral values [[http://simupop.sourceforge.net/wileyBook/ch7_admixture.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch7_admixture.log|@@[log]@@]]
 * Evolution of Lung Cancer [[http://simupop.sourceforge.net/wileyBook/ch7_LC_evolve.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch7_LC_evolve.log|@@[log]@@]]
 * Implementation of the lung cancer disease model [[http://simupop.sourceforge.net/wileyBook/ch7_LC_model.py|@@[source]@@]] [[http://simupop.sourceforge.net/wileyBook/ch7_LC_model.log|@@[log]@@]]

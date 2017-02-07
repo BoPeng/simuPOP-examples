@@ -1,7 +1,7 @@
 (:title Simulation of samples for Genome-Wide Association Studies:)
 %rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:simuGWAS.zip | http://simupop.sourceforge.net/images/download.jpg]]|simuGWAS.zip
 
-!! Introduction
+## Introduction
 
 This script simulate GWAS data using data from the HapMap project. Please refer to 
 
@@ -9,7 +9,7 @@ This script simulate GWAS data using data from the HapMap project. Please refer 
 
 and cite this article if you have used this script for your research.
 
-!! List of scripts
+## List of scripts
 The file simuGWAS.zip contains several files, including:
 
 :'''[[Attach:simuGWAS.py | simuGWAS.py]]''': This script evolves a population forward in time, subject to rapid population expansion, mutation, recombination and natural selection. A trajectory simulation method is used to control the allele frequency of optional disease predisposing loci. A scaling approach can be used to improve efficiency when weak, additive genetic factors are used
@@ -44,7 +44,7 @@ The file simuGWAS.zip contains several files, including:
 
  %color=red%These examples are described in detailed in [[http://www.biomedcentral.com/1471-2105/11/442/abstract|this paper]]%%. Please do not hesitate to contact me for any question. More examples will be added when simuGWAS.py is used to produce other types of samples.
 
-!! Steps of simulation
+## Steps of simulation
 
 # Download HapMap data using loadHapMap2.py or loadHapMap3.py. Because of the size of the datasets, you do not have to download all the data at once.
 
@@ -54,7 +54,7 @@ The file simuGWAS.zip contains several files, including:
 
 # Following one of the examples to process the simulated population and draw samples. If your simulation closely mimics what one of the examples does, you can use the script with perhaps changes to the parameters. Otherwise, you will need to learn some simuPOP in order to change these script or write your own post-processing scripts.
 
-!! How to execute these scripts
+## How to execute these scripts
 
 !!!! Graphical user interface
 The easiest way to run loadHapMap2.py, loadHapMap3.py, selectMarkers.py and simuGWAS.py is to use their graphical user interfaces. When you execute these scripts without parameter, parameter input dialogs will be displayed so that you can input parameters interactively. For example, the GUI of script simuGWAS.py is

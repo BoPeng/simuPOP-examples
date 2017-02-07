@@ -3,7 +3,7 @@
 The following scripts were originally distributed with simuPOP in the @@scripts@@ directory. They have been used for different research topics and can serve as examples on how to use simuPOP in real-world applications. Note that the documentations may be incorrect and there may be bugs in the script. %red%Please feel free to [[mailto:bpeng@mdanderson.org|contact me]] for any problem you have with these scripts.%% 
 
 
-!!! Published papers that make use of simuPOP
+### Published papers that make use of simuPOP
 
 These scripts were written for particular research papers. I have tried to update them so that they could run correctly under the current simuPOP version.
 
@@ -15,11 +15,11 @@ These scripts were written for particular research papers. I have tried to updat
 
 * [[Cookbook/simuRareVariants]] (SRV) simulate populations with rare variants. (described in [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/|Peng and Liu, Hum Hered. 70(4): 287–291]]).
 
-!!! Script for fun (research related)
+### Script for fun (research related)
 
 These scripts are written in simuPOP for various purposes. They can be useful examples for your research.
 
 * [[Cookbook/landscapeGenetics]] A landscape genetics simulation with different selection forces on X and Y axis and epistasis.
 
-!!! Miscellaneous
+### Miscellaneous
 * A power calculator for case control association studies with known family histories. Script [[ Cookbook/caseControlPower | caseControlPower.py]] calculates statistical power of case control association studies with known family histories. It makes use of simuPOP's simuOpt module for its graphical user interface and simuPOP.gsl module for probability functions. Please refer to Peng et al, Human Genetics, 2010 for details.

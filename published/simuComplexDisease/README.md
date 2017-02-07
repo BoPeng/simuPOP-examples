@@ -32,7 +32,7 @@ The program is written in Python using the simuPOP modules. For more information
 please visit simuPOP website http://simupop.sourceforge.net .
 
 
-!!! Genotype structure and disease
+### Genotype structure and disease
 
 With typical settings, each individual will have 10 chromosomes, each having
 20 equal spaced microsatellite or SNP markers. A disease will be caused by 
@@ -43,7 +43,7 @@ not affectedness status or trait value, we do not assign individual
 affectedness till the sampling stage.
 
 
-!!! Evolutionary Scenario
+### Evolutionary Scenario
 
 The evolutionary process can be divided into three stages:
 
@@ -89,7 +89,7 @@ and then evolve freely. This method may fail due to extinction of disease allele
 but it has the advantage of being able to simulate linked DSL.
 
 
-!!! Statistics Monitored
+### Statistics Monitored
 
 A number of statistics will be measured and saved. They are:
 

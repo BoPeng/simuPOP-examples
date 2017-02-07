@@ -1,6 +1,6 @@
 (:title simuPOP Examples:)
 
-!! Demonstration of basic population genetics models
+## Demonstration of basic population genetics models
 
 This selection lists simple examples that demonstrates the classical population genetics models.
 * [[Cookbook/GeneticDrift]] Changes of allele frequency due to genetic drift.
@@ -21,7 +21,7 @@ This selection lists simple examples that demonstrates the classical population 
 
 * [[Cookbook/SelectiveSweep]] Amplification (or reduction) of variation in nucleotides in neighboring DNA because of natural selection.
 
-!! Customized Operators
+## Customized Operators
 
 * [[Cookbook/pyOperator]] An example about during-mating and post-mating Python operators.
 
@@ -30,7 +30,7 @@ This selection lists simple examples that demonstrates the classical population 
 * [[Cookbook/haplodiploidMating]] Recombination in haplodiploid populations.
 
 
-!! Customized mating schemes
+## Customized mating schemes
 
 * [[Cookbook/Selfing]] Partial self-fertilization.
 
@@ -44,7 +44,7 @@ This selection lists simple examples that demonstrates the classical population 
 
 * [[Cookbook/Mitochondrial]] Evolution of mitochondrial chromosomes.
 
-!! Evolutionary scenarios
+## Evolutionary scenarios
 
 * [[Cookbook/RestartIfFailed]] Restart an evolution if the frequency of an allele is not within specified range.
 

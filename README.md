@@ -12,3 +12,7 @@ Therefore,
   * Use `2to3 -w script.py` to convert the script to Python 3.
   * Manually change the parameter passing function or use [misc/simuOptParam2argparse.py](misc/simuOptParam2argparse.py) to assist the conversion process.
   * Submit a pull-request to fix the script.
+
+## Contributions
+
+If you have a simuPOP script that you would like to share with others, please fork this project, add your scripts, and submit a pull request. Please document your script as well as possible.

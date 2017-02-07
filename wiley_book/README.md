@@ -19,8 +19,10 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 * A two-locus symmetric viability model of natural selection [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_viabilityModel.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_viabilityModel.log)
 * Decay of homozygosity due to random genetic drift [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_Ht.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_Ht.log)
 * Absorption time and time to fixation [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.log)
+
 ## Chapter 3: Ascertainment bias in population genetics
 * Script to simulate the evolution of microsatellite marker using a scaling technique [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch4_scaling.py) 
+
 ## Chapter 4: Observing properties of evolving populations
 * Evolve a population subject to mutation and selection [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_reichEvolve.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_reichEvolve.log)
 * A Python class that defines instant and exponential population expansion models [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/reichDemo.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/reichDemo.log)
@@ -28,6 +30,7 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 * A demographic model with population split and rapid population expansion [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_demography.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_demography.log)
 * Simulation of multiple independent single-locus selection models [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_mlSelector.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_mlSelector.log)
 * A Python function to calculate effective number of alleles [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_reichStatFunc.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch5_reichStatFunc.log)
+
 ## Chapter 5: Simulating populations with complex human diseases
 * Simulating allele frequency trajectory backward in time. [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_backwardTrajectory.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_backwardTrajectory.log)
 * Simulation of a disease model with GxG and GxE interactions [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_example2.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_example2.log)
@@ -41,6 +44,7 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 * Generating case control samples [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_genCaseCtrl.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_genCaseCtrl.log)
 * Straightforward simulation of the introduction of a disease allele [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_introduction.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_introduction.log)
 * Reintroduction of a disease allele when it is lost [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_reintroduction.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch6_reintroduction.log)
+
 ## Chapter 6: Nonrandom mating and its applications
 * Simulating an admixed population with recorded ancestral values [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch7_admixture.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch7_admixture.log)
 * Evolution of Lung Cancer [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch7_LC_evolve.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch7_LC_evolve.log)

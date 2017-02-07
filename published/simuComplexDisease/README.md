@@ -1,5 +1,5 @@
 (:title Simulation of human genetic diseases with selection:)
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:simuComplexDisease.py | http://simupop.sourceforge.net/images/download.jpg]]|simuComplexDisease.py
+%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [ http://simupop.sourceforge.net/images/download.jpg](Attach:simuComplexDisease.py )|simuComplexDisease.py
 
 
 This script uses a significantly different mechanism to control the allele 

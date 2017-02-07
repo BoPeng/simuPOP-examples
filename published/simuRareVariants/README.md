@@ -8,7 +8,7 @@
 
 * %red%A bug that can cause incorrect genotype for recombinants under some rare conditions has been reported and fixed in trunk.%% If you are running the simulation with recombination, you should use simuPOP version 1.0.7 or higher.
 
-* May 4, 2011: An updated version is uploaded. This version adds a parameter `postHook` to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [[Attach:evol.py|here]].
+* May 4, 2011: An updated version is uploaded. This version adds a parameter `postHook` to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [here](Attach:evol.py).
 
 ## NOTE
 
@@ -22,7 +22,7 @@ This script simulates the introduction and evolution of genetic variants in one 
 
 Please cite
 
-  Bo Peng, Xiaoming Liu (2011) [[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/|'''Simulating Sequences of the Human Genome with Rare Variants''']] Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
+  Bo Peng, Xiaoming Liu (2011) ['''Simulating Sequences of the Human Genome with Rare Variants'''](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/) Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
 
 If you have used srv for your research.
 
@@ -107,7 +107,7 @@ The end result of this script include
 This script requires simuPOP 1.0.5 to execute. The installation steps are described in detail in the simuPOP website. If you are using windows, please
 * Download and install Python 2.6 from http://www.python.org.
 * Download and install simuPOP 1.0.5 or later from http://sourceforge.net/projects/simupop/files/
-* Download %red%[[Attach:srv.py|srv.py]]%% and execute.
+* Download %red%[srv.py](Attach:srv.py)%% and execute.
 
 ## How to use this script
 
@@ -342,23 +342,23 @@ options:
 
 The selected population can be imported and post-processed using simuPOP. If you need to apply a quantitative trait model to the simulated population, you can use a function `pyQuanTrait` using a user-defined function. The only difference is that 'alleles' in the simulated population are locations of mutants. Penetrance model can be assigned similarly. 
 
-Example %red%[[Attach:quanTraits.py|quanTraits.py]]%% demonstrates how to apply a quantitative trait model and draw samples with extreme trait values.
+Example %red%[quanTraits.py](Attach:quanTraits.py)%% demonstrates how to apply a quantitative trait model and draw samples with extreme trait values.
 
-Example %red%[[Attach:pedigree.py|pedigree.py]]%% demonstrates how to evolve the simulated population for three more generations and draw three-generational pedigrees from the simulated multi-generational population, with restrictions on pedigree size and number of affected members.
+Example %red%[pedigree.py](Attach:pedigree.py)%% demonstrates how to evolve the simulated population for three more generations and draw three-generational pedigrees from the simulated multi-generational population, with restrictions on pedigree size and number of affected members.
 
 These scripts import that calls the simuRareVariant function directly and uses functions defined in that script to save samples.
 
 ### Arbitrary distribution of selection coefficients.
 
-The graphical user interface allows you to perform simulations for fix types (constant, gamma and mixed gamma). If you would like to define you own distribution, you can define a function that returns selection coefficient according to your distribution and pass it to the simuRareVariants function of simuRareVariants.py. You might need to use simuPOP's random number generation functions listed in [[http://simupop.sourceforge.net/manual_release/build/refManual_ch2_sec5.html#class-rng | here]].
+The graphical user interface allows you to perform simulations for fix types (constant, gamma and mixed gamma). If you would like to define you own distribution, you can define a function that returns selection coefficient according to your distribution and pass it to the simuRareVariants function of simuRareVariants.py. You might need to use simuPOP's random number generation functions listed in [ here](http://simupop.sourceforge.net/manual_release/build/refManual_ch2_sec5.html#class-rng ).
 
-Example %red%[[Attach:myDist.py|myDist.py]]%% demonstrates how to define such a function.
+Example %red%[myDist.py](Attach:myDist.py)%% demonstrates how to define such a function.
 
 ### Location-specific selection coefficients
 
 If you would like to define a selection model with selection coefficients related to mutation location. You can add a parameter `loc` to the distribution function. In that case, the location (in basepair) of the new mutant will be passed to your function. This feature allows you to define a neutral region within a larger region under selection, or return neutral for mutation happens at the last nucleotide of a codon. Moreover, if you have fixed set of selection coefficients, you can use this feature to pass them to the script.
 
-Example %red%[[Attach:locSpecific.py|locSpecific.py]]%% demonstrates how to define a fitness function that returns location-specific fitness values.
+Example %red%[locSpecific.py](Attach:locSpecific.py)%% demonstrates how to define a fitness function that returns location-specific fitness values.
 
 ### Analyze all mutation events
 
@@ -369,7 +369,7 @@ If you would like to have a list of all mutation events happened during the evol
 where type is 0 for forward mutation, 1 for backward mutation and 2 for ignored mutation in the infinite-site model. You can process this file to trace the age of all mutants.
 
 
-Example %red%[[Attach:mutAge.py|mutAge.py]]%% demonstrates how to process this file and calculate the age of all mutants.
+Example %red%[mutAge.py](Attach:mutAge.py)%% demonstrates how to process this file and calculate the age of all mutants.
 
 ## Extending simuRareVariants.py
 

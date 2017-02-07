@@ -1,6 +1,6 @@
 (:title Forward-Time Population Genetics Simulations: Methods, Implementation, and Applications:)
 
-%rfloat newwin height=150% [[http://www.wiley.com/buy/978-0-470-50348-5 | http://media.wiley.com/product_data/coverImage300/83/04705034/0470503483.jpg]]
+%rfloat newwin height=150% [ http://media.wiley.com/product_data/coverImage300/83/04705034/0470503483.jpg](http://www.wiley.com/buy/978-0-470-50348-5 )
 
 This page contains all examples in a book ''Forward-Time Population Genetics Simulations: Methods, Implementation, and Applications'' by Bo Peng (author of simuPOP), Marek Kimmel and Christopher I Amos.
 

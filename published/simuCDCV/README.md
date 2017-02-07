@@ -1,5 +1,5 @@
 (:title simulation for the Common Disease - Common Variant Hypothesis:)
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:simuCDCV.py | http://simupop.sourceforge.net/images/download.jpg]]|simuCDCV.py
+%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [ http://simupop.sourceforge.net/images/download.jpg](Attach:simuCDCV.py )|simuCDCV.py
 
 
 Reich and Lander's 2001 paper "On the allelic spectrum of human disease"

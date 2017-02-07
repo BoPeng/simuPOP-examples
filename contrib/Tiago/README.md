@@ -1,5 +1,5 @@
 (:title Landscape genetics example:)
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:land.py | http://simupop.sourceforge.net/images/download.jpg]]|land.py
+%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [ http://simupop.sourceforge.net/images/download.jpg](Attach:land.py )|land.py
 
 The example attached provides a landscape genetics simulation, the main points are:
 
@@ -27,7 +27,7 @@ The example attached provides a landscape genetics simulation, the main points a
 
 !!Video
 
-From the output of the script above you can generate a set of images with [[Attach:plot.py |this script]].
+From the output of the script above you can generate a set of images with [this script](Attach:plot.py ).
 
 Here is a video example:
 
@@ -191,7 +191,7 @@ The main loop, note the fixed initial frequencies, the mutation, placing the new
 
 !!Copyright
 
-The author of this script is [[http://tiago.org | Tiago Antao]]. You are free to use this script, but I would appreciate if you inform me in case you use it. In case of doubts, ideas, suggestions or whatever, feel free to contact me.
+The author of this script is [ Tiago Antao](http://tiago.org ). You are free to use this script, but I would appreciate if you inform me in case you use it. In case of doubts, ideas, suggestions or whatever, feel free to contact me.
 
 !!!!%block class=messagehead%10 September 2010
 

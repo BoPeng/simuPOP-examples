@@ -1,22 +1,22 @@
 (:title Simulation of samples for Genome-Wide Association Studies:)
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [[Attach:simuGWAS.zip | http://simupop.sourceforge.net/images/download.jpg]]|simuGWAS.zip
+%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [ http://simupop.sourceforge.net/images/download.jpg](Attach:simuGWAS.zip )|simuGWAS.zip
 
 ## Introduction
 
 This script simulate GWAS data using data from the HapMap project. Please refer to 
 
-->Peng B, Amos CI. (2010) [[http://www.biomedcentral.com/1471-2105/11/442|'''Forward-time simulation of realistic samples for genome-wide association studies''']] BMC Bioinformatics. 2010 Sep 1;11:442. doi: 10.1186/1471-2105-11-442.
+->Peng B, Amos CI. (2010) ['''Forward-time simulation of realistic samples for genome-wide association studies'''](http://www.biomedcentral.com/1471-2105/11/442) BMC Bioinformatics. 2010 Sep 1;11:442. doi: 10.1186/1471-2105-11-442.
 
 and cite this article if you have used this script for your research.
 
 ## List of scripts
 The file simuGWAS.zip contains several files, including:
 
-:'''[[Attach:simuGWAS.py | simuGWAS.py]]''': This script evolves a population forward in time, subject to rapid population expansion, mutation, recombination and natural selection. A trajectory simulation method is used to control the allele frequency of optional disease predisposing loci. A scaling approach can be used to improve efficiency when weak, additive genetic factors are used
+:'''[ simuGWAS.py](Attach:simuGWAS.py )''': This script evolves a population forward in time, subject to rapid population expansion, mutation, recombination and natural selection. A trajectory simulation method is used to control the allele frequency of optional disease predisposing loci. A scaling approach can be used to improve efficiency when weak, additive genetic factors are used
 
-:'''[[Attach:loadHapMap2.py | loadHapMap2.py]]''': This python module provides function loadHapMapPop to download and import the HapMap populations. It can also be served as a script to download part or all populations from the phase 2 of the HapMap dataset
+:'''[ loadHapMap2.py](Attach:loadHapMap2.py )''': This python module provides function loadHapMapPop to download and import the HapMap populations. It can also be served as a script to download part or all populations from the phase 2 of the HapMap dataset
 
-:'''[[Attach:loadHapMap3.py | loadHapMap3.py]]''': This script downloads and loads release 3 of hapmap phase 3 datasets in ftp://ftp.ncbi.nlm.nih.gov/hapmap//phasing/2009-02_phaseIII/HapMap3_r2/ and downloads the fine-scale recombination map from http://ftp.hapmap.org/recombination/2008-03_rel22_B36/rates/ and saves the genetic distance of each marker in a dictionary (geneticMap) in each population's local namespace.
+:'''[ loadHapMap3.py](Attach:loadHapMap3.py )''': This script downloads and loads release 3 of hapmap phase 3 datasets in ftp://ftp.ncbi.nlm.nih.gov/hapmap//phasing/2009-02_phaseIII/HapMap3_r2/ and downloads the fine-scale recombination map from http://ftp.hapmap.org/recombination/2008-03_rel22_B36/rates/ and saves the genetic distance of each marker in a dictionary (geneticMap) in each population's local namespace.
 
 ->The saved populations have the following features:
 
@@ -30,19 +30,19 @@ The file simuGWAS.zip contains several files, including:
 
 ->5. A dictionary 'geneticMap' is used to store genetic distance of each marker.
 
-:'''[[Attach:selectMarkers.py | selectMarkers.py]]''': This python module provides several utility functions that handles HapMap populations. When used as a script, this module creates a population using selected markers and populations
+:'''[ selectMarkers.py](Attach:selectMarkers.py )''': This python module provides several utility functions that handles HapMap populations. When used as a script, this module creates a population using selected markers and populations
 
-:'''[[Attach:example1.py | example1.py]]''': This example generates a sample using default parameters. and compares it with the HapMap population from which it is generated
+:'''[ example1.py](Attach:example1.py )''': This example generates a sample using default parameters. and compares it with the HapMap population from which it is generated
 
-:'''[[Attach:example2.py | example2.py]]''': This example simulates a case-control sample using a gene environment interaction model. 
+:'''[ example2.py](Attach:example2.py )''': This example simulates a case-control sample using a gene environment interaction model. 
 
 ->%red%note:%% This example requires a marker list file from Illumina. If you do not have this file, you can get a similar file from http://www.openbioinformatics.org/gengen/gengen_download.html. You should then change line 46 of example 2 from `ann = open('HumanHap550v3_A.lst')` to `ann = open('hh550v3_snptable.txt')`, and line 49 from `names.append(line.split(',')[1])` to `names.append(line.split('\t')[0])`.
 
-:'''[[Attach:example3.py | example3.py]]''': This example simulates recent and remote selective sweep and draw trio samples
+:'''[ example3.py](Attach:example3.py )''': This example simulates recent and remote selective sweep and draw trio samples
 
-:'''[[Attach:example4.py | example4.py]]''': This example simulates an admixed population
+:'''[ example4.py](Attach:example4.py )''': This example simulates an admixed population
 
- %color=red%These examples are described in detailed in [[http://www.biomedcentral.com/1471-2105/11/442/abstract|this paper]]%%. Please do not hesitate to contact me for any question. More examples will be added when simuGWAS.py is used to produce other types of samples.
+ %color=red%These examples are described in detailed in [this paper](http://www.biomedcentral.com/1471-2105/11/442/abstract)%%. Please do not hesitate to contact me for any question. More examples will be added when simuGWAS.py is used to produce other types of samples.
 
 ## Steps of simulation
 

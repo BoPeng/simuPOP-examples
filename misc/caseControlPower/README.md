@@ -2,7 +2,7 @@
 
 %red%Due to a regression bug in simuPOP 1.0.4 and 1.0.5, please use simuPOP 1.0.3 or simuPOP 1.0.6 or later to execute this script.%%
 
-%rfloat text-align=center margin-top=5px margin-right=25px margin-bottom=15px margin-left=25px % [ http://simupop.sourceforge.net/images/download.jpg](Attach:caseControlPower.py )|caseControlPower.py
+
 
 ### ChangeLog
 

@@ -43,13 +43,13 @@ traits.sort()
 cutoff1 = traits[499]
 cutoff2 = traits[-500]
 # 
-print 'Cutoff values are %.4f and %.4f' % (cutoff1, cutoff2)
+print('Cutoff values are %.4f and %.4f' % (cutoff1, cutoff2))
 pop.removeIndividuals(filter=lambda trait: trait > cutoff1 and trait < cutoff2)
-print pop.popSize()
+print(pop.popSize())
 markers = saveMarkerInfoToFile(pop, 'sample.map')
-print 'Mutant locations are saved to file sample.map'
+print('Mutant locations are saved to file sample.map')
 saveMutantsToFile(pop, 'sample.mut')
-print 'Mutants are saved to file sample.mut'
+print('Mutants are saved to file sample.mut')
 
 
 

@@ -22,13 +22,13 @@ simuRareVariants(regions=['chr1:1..63000'], N=(8100, 8100, 7900, 90000),
 lst = open('mutations.lst')
 ages = {}
 for line in lst.readlines():
-    gen,mut,ind,mtype = map(int, line.split())
+    gen,mut,ind,mtype = list(map(int, line.split()))
     # 0 valid, 2 relocated, 3 ignored
     if mtype != 3:
         ages[mut] = gen
 
-print 'mutation generation'
-for mut in ages.keys():
-    print mut, gen - ages[mut]
+print('mutation generation')
+for mut in list(ages.keys()):
+    print(mut, gen - ages[mut])
 
 

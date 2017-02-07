@@ -35,7 +35,7 @@ pop.evolve(
 )
 # what is the average number of mutants in this population?
 avgMutants = (pop.popSize()*pop.totNumLoci()*2. - pop.genotype().count(0)) / pop.popSize()
-print('Average number of mutants is %.2f' % avgMutants)
+print(('Average number of mutants is %.2f' % avgMutants))
 #
 # This contains marker information for the initial population
 print('Mutant locations are saved to file sample.map')
@@ -53,7 +53,7 @@ sim.pyPenetrance(pop, func=myPenet, loci=sim.ALL_AVAIL)
 for gen in range(2, -1, -1):
     pop.useAncestralGen(gen)
     sim.stat(pop, numOfAffected=True, vars=('numOfAffected', 'propOfAffected'))
-    print('Generation %d has %d (%.2f%%) affected individuals.' % (gen, pop.dvars().numOfAffected, pop.dvars().propOfAffected))
+    print(('Generation %d has %d (%.2f%%) affected individuals.' % (gen, pop.dvars().numOfAffected, pop.dvars().propOfAffected)))
 
 # draw three generation pedigrees with at least two affected members
 print('Drawing 10 pedigrees with at least three affected members')

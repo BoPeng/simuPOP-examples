@@ -20,6 +20,7 @@ genetic diseases caused by a large number of rare variants.
 #
 
 import simuOpt
+import collections
 simuOpt.setOptions(alleleType='long', optimized=True, quiet=True, version='1.0.5')
 
 import simuPOP as sim
@@ -342,13 +343,13 @@ def mutantsToAlleles(pop, logger):
         for ind in pop.individuals():
             loci |= set(ind.genotype(0, ch))
             loci |= set(ind.genotype(1, ch))
-        if markers.has_key(chNumber):
+        if chNumber in markers:
             markers[chNumber] |= loci
         else:
             markers[chNumber] = loci
     # create a population for each chromosome
     pops = []
-    chroms = markers.keys()
+    chroms = list(markers.keys())
     chroms.sort()
     for ch in chroms:
         markers[ch] = list(markers[ch])
@@ -431,8 +432,8 @@ def addMutantsFrom(pop, param):
     mPop.resize(pop.popSize())
     # Add loci to pop
     for ch in range(mPop.numChrom()):
-        pop.addLoci([ch]*mPop.numLoci(ch), range(pop.numLoci(ch) + 1,
-            pop.numLoci(ch) + mPop.numLoci(ch) + 1))
+        pop.addLoci([ch]*mPop.numLoci(ch), list(range(pop.numLoci(ch) + 1,
+            pop.numLoci(ch) + mPop.numLoci(ch) + 1)))
     if logger:
         # if an initial population is given
         logger.info('Adding mutants to population after bottleneck')
@@ -495,7 +496,7 @@ class Counter(dict):
         elements() will ignore it.
 
         '''
-        for elem, count in self.iteritems():
+        for elem, count in self.items():
             for _ in repeat(None, count):
                 yield elem
 
@@ -523,7 +524,7 @@ class Counter(dict):
             if hasattr(iterable, 'iteritems'):
                 if self:
                     self_get = self.get
-                    for elem, count in iterable.iteritems():
+                    for elem, count in iterable.items():
                         self[elem] = self_get(elem, 0) + count
                 else:
                     dict.update(self, iterable) # fast path when counter is empty
@@ -568,13 +569,13 @@ def saveMarkerInfoToFile(pop, filename, logger=None):
     selCoef = pop.dvars().selCoef
     if filename:
         map = open(filename, 'w')
-        print >> map, 'name\tchrom\tposition\tfrequency\ts\th'
+        print('name\tchrom\tposition\tfrequency\ts\th', file=map)
     for ch,region in enumerate(pop.chromNames()):
         # real chromosome number
         chName = region.split(':')[0][3:]
         counts = allCounts[ch]
         # get markers
-        mutants = counts.keys()
+        mutants = list(counts.keys())
         mutants.sort()
         # allele 0 is fake
         if mutants[0] == 0:
@@ -585,11 +586,11 @@ def saveMarkerInfoToFile(pop, filename, logger=None):
             sz = pop.popSize() * 2.
             for idx,marker in enumerate(mutants):
                 if type(selCoef) == type({}):
-                    print >> map, 'loc%d_%d\t%s\t%d\t%.8f\t%.8f\t%.3f' % (ch + 1, idx + 1, chName, marker,
-                        counts[marker] / sz, selCoef[marker][0], selCoef[marker][1])
+                    print('loc%d_%d\t%s\t%d\t%.8f\t%.8f\t%.3f' % (ch + 1, idx + 1, chName, marker,
+                        counts[marker] / sz, selCoef[marker][0], selCoef[marker][1]), file=map)
                 else:
-                    print >> map, 'loc%d_%d\t%s\t%d\t%.8f\t%.8f\t%.3f' % (ch + 1, idx + 1, chName, marker,
-                        counts[marker] / sz, selCoef, 0.5)
+                    print('loc%d_%d\t%s\t%d\t%.8f\t%.8f\t%.3f' % (ch + 1, idx + 1, chName, marker,
+                        counts[marker] / sz, selCoef, 0.5), file=map)
     if filename:
         map.close()
     return allMutants
@@ -607,12 +608,12 @@ def saveMutantsToFile(pop, filename, infoFields=[], logger=None):
         for ch in range(pop.numChrom()):
             geno = list(ind.genotype(0, ch))
             geno.sort()
-            print >> mut, idx+1, fields, ' '.join([str(x) for x in geno if x != 0])
+            print(idx+1, fields, ' '.join([str(x) for x in geno if x != 0]), file=mut)
             geno = list(ind.genotype(1, ch))
             geno.sort()
             if geno[0] == 0:
                 geno = geno[1:]
-            print >> mut, idx+1, fields, ' '.join([str(x) for x in geno if x != 0])
+            print(idx+1, fields, ' '.join([str(x) for x in geno if x != 0]), file=mut)
         prog.update()
     mut.close()
 
@@ -643,7 +644,7 @@ def saveGenotypeToFile(pop, filename, allMutants, logger=None):
     sexCode = {sim.MALE: 1, sim.FEMALE: 2}
     affCode = {False: 1, True: 2}
     for cnt, ind in enumerate(pop.individuals()):
-        print >> ped, '%s 0 0 %d %d' % (cnt + 1, sexCode[ind.sex()], affCode[ind.affected()]),
+        print('%s 0 0 %d %d' % (cnt + 1, sexCode[ind.sex()], affCode[ind.affected()]), end=' ', file=ped)
         for ch in range(pop.numChrom()):
             # a blank genotype
             geno = [0]*(len(markerPos[ch])*2)
@@ -657,8 +658,8 @@ def saveGenotypeToFile(pop, filename, allMutants, logger=None):
                 if m == 0:
                     break
                 geno[2*markerPos[ch][m]+1] = 1
-            print >> ped, ' '.join([str(x) for x in geno]),
-        print >> ped
+            print(' '.join([str(x) for x in geno]), end=' ', file=ped)
+        print(file=ped)
         prog.update()
     ped.close()
 
@@ -803,7 +804,7 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
             selCoef = [0.206, 0.146*2, 0.5]
         elif selDist == 'constant':
             selCoef = [0.01, 0.5]
-        elif not callable(selDist):
+        elif not isinstance(selDist, collections.Callable):
             raise ValueError("Unsupported random distribution")
     else:
         # force to list type
@@ -823,7 +824,7 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
     if type(popFile) == str:
         popFile = [popFile, -1]
     #
-    if callable(selDist):
+    if isinstance(selDist, collections.Callable):
         mySelector = MutSpaceSelector(selDist=selDist, mode=mode, output=collector.getCoef)
     elif selDist == 'mixed_gamma':
         mySelector = MutSpaceSelector(selDist=mixedGamma(selCoef), mode=mode, output=collector.getCoef)
@@ -860,7 +861,7 @@ def simuRareVariants(regions, N, G, mu, selDist, selCoef, selModel='exponential'
     # 0, G[0], G[0]+G[1], ..., sum(G)
     Gens = [sum(G[:i]) for i in range(len(G)+1)]
     for i in range(len(Gens)-1):
-        progGen += range(Gens[i], Gens[i+1], steps[i])
+        progGen += list(range(Gens[i], Gens[i+1], steps[i]))
     pop.evolve(
         initOps=sim.InitSex(),
         preOps=[

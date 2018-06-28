@@ -6,7 +6,7 @@
 
 * Feb, 3, 2012: A new distribution called mixed_gamma1 is added to srv.py that mimics the distribution used in Kyrukov et al, 2009. The major difference between mixed_gamma1 and mixed_gamma is that mixed_gamma discard fitness values outside of a range, whereas mixed_gamma1 returns 0 or 1 for values for values falling out of the boundaries.
 
-* %red%A bug that can cause incorrect genotype for recombinants under some rare conditions has been reported and fixed in trunk.%% If you are running the simulation with recombination, you should use simuPOP version 1.0.7 or higher.
+* A bug that can cause incorrect genotype for recombinants under some rare conditions has been reported and fixed in trunk. If you are running the simulation with recombination, you should use simuPOP version 1.0.7 or higher.
 
 * May 4, 2011: An updated version is uploaded. This version adds a parameter `postHook` to the function so that a Python function can be called, for example to draw a sample, at the end of each generation. An example can be seen [here](Attach:evol.py).
 
@@ -18,11 +18,11 @@
 
 ## Introduction
 
-This script simulates the introduction and evolution of genetic variants in one or more ''regions'' of chromosomes. These regions span roughly 10k to 100k basepair and can be considered as a gene. During evolution, mutants are introduced to the population and change the fitness of individuals who carry these mutants. '''The most distinguishing feature of this script is that it allows multi-locus fitness schemes with random or locus-specific diploid single-locus selection models to newly arising mutants'''. A multi-locus selection model is used to assign a fitness value to individuals according the mutants they carry.
+This script simulates the introduction and evolution of genetic variants in one or more ''regions'' of chromosomes. These regions span roughly `10k` to `100k` basepair and can be considered as a gene. During evolution, mutants are introduced to the population and change the fitness of individuals who carry these mutants. **The most distinguishing feature of this script is that it allows multi-locus fitness schemes with random or locus-specific diploid single-locus selection models to newly arising mutants**. A multi-locus selection model is used to assign a fitness value to individuals according the mutants they carry.
 
 Please cite
 
-  Bo Peng, Xiaoming Liu (2011) ['''Simulating Sequences of the Human Genome with Rare Variants'''](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/) Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
+  Bo Peng, Xiaoming Liu (2011) [Simulating Sequences of the Human Genome with Rare Variants](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3164177/) Hum Hered. 70(4): 287–291. Published online 2011 January 6. doi: 10.1159/000323316 PMCID: PMC3164177
 
 If you have used srv for your research.
 
@@ -34,35 +34,41 @@ We assume one or more regions of chromosomes. Mutation can happen at any nucleot
 
 This script uses a multi-stage population expansion / bottleneck model with population structure. Assuming there are n stages, the demographic model can be specified by
 
-->`N = [N0, N1, ..., N_n-1, N_n]`
-->`G = [G0, G1, ..., G_n-1]`
-->`splitTo = [p1, p2, ..., pm]` and `splitAt`
+```
+N = [N0, N1, ..., N_n-1, N_n]
+G = [G0, G1, ..., G_n-1]
+splitTo = [p1, p2, ..., pm]
+and splitAt
+```
+where `N` is the starting population size and size at the end of each stage, `G` is the number of generations at each stage, `p1`, `p2`, ..., `pm` are proportions of subpopulations (should sum to 1). Then,
 
-where N is the starting population size and size at the end of each stage, G is the number of generations at each stage, p1, p2, ..., pm are proportions of subpopulations (should sum to 1). Then,
-
-* If {$N_t \lt N_{t+1}$}, an exponential population expansion model is used to expand population from size {$N_t$} to {$N_{t+1}$}.
+* If $N_t \lt N_{t+1}$, an exponential population expansion model is used to expand population from size {$N_t$} to {$N_{t+1}$}.
 * If {$N_t > N_{t+1}$}, an instant population reduction model is used to reduce population size instantly to {$N_{t+1}$}. 
 * If {$m > 1$}, the population will be split into `m` subpopulations according to proportions p1, ..., pm, at geneartion `splitAt`.
 
 The default demographic model consists of a long burn-in stage, a short bottleneck stage and a rapid population expansion stage. The burn-in stage of this demographic model evolves a relatively small population of 8100 individuals until it reaches a mutation selection equilibrium. After a short bottleneck stage of 7900 individuals, the population grows exponentially to a population of 900,000 individuals in 370 generations. This demographic model reflects a demographic model of the European population (Kryukov, et al., 2009) and should be specified as
 
-->`N=[8100, 8100, 7900, 900000], G=[8000, 100, 370]`.
+```
+N=[8100, 8100, 7900, 900000], G=[8000, 100, 370]
+````
 
 ### Mutation model
 
 This script supports two mutation models
 
-* A default '''finite-sites mutation model''' where mutations can happen at any locus. If a mutant is mutated, it will be mutated back to a wildtype allele.
+* A default `finite-sites mutation model` where mutations can happen at any locus. If a mutant is mutated, it will be mutated back to a wildtype allele.
 
-* A '''infinite-sites mutation model''' where mutations can happen only at loci without existing mutant. If a mutation hits a locus with existing locus, it will be relocated to another locus without existing mutant, or be ignored if no such locus can be identified.
+* A `infinite-sites mutation model` where mutations can happen only at loci without existing mutant. If a mutation hits a locus with existing locus, it will be relocated to another locus without existing mutant, or be ignored if no such locus can be identified.
 
 This script can output a mutant file that dump all mutation events during evolution. This file has the format of
 
-->`generation location individual_index type`
+```
+generation location individual_index type
+```
 
 where type is 0 for forward, 1 for backward, 2 for relocated and 3 for ignored mutations.
 
-%red%NOTE: If you are using an infinite-sites model, please pay attention to the number of segregation sites (column 3 of the output) and see if the population has been saturated with new mutants (#segregation site == #sites).%%
+%NOTE: If you are using an infinite-sites model, please pay attention to the number of segregation sites (column 3 of the output) and see if the population has been saturated with new mutants (#segregation site == #sites).
 
 ### Selection model
 
@@ -76,13 +82,13 @@ If there are multiple mutants, the overall fitness of an individual is determine
 * An additive model where {$f=1-\sum\left(1-f_{i}\right)$}
 * An exponential model (default) where {$f=\exp\left(\sum\left(1-f_{i}\right)\right)$}
 
-%red%NOTE: Fixed sites are reverted to wildtype alleles to avoid problems such as the Muller's Ratchet%%. You can remove operator RevertFixedSites from the script if this is not what you need.
+NOTE: Fixed sites are reverted to wildtype alleles to avoid problems such as the Muller's Ratchet. You can remove operator RevertFixedSites from the script if this is not what you need.
 
 ### Recombination
 
 Because this script simulates small regions of chromosomes, recombination is usually ignored. However, if you would like to simulate longer regions, or simulate special cases such as unlinked loci (r=0.5), you can specify a recombination rate using parameter `recRate`, which specifies recombination rate per basepair per generation.
 
-%red%This script works best for either full recombination (r=0.5) or realistic LD (e.g. r < 1e-5), specifying large recombination rates (e.g. r=0.1) will results in low performance due to excessive number of recombinations.%%
+This script works best for either full recombination (r=0.5) or realistic LD (e.g. r < 1e-5), specifying large recombination rates (e.g. `r=0.1`) will results in low performance due to excessive number of recombinations.
 
 ### Migration
 
@@ -100,29 +106,25 @@ The end result of this script include
 
 * One or more simuPOP population that can be imported to simuPOP and analyzed.
 
-%blue%Note that fixed mutants are not counted as segregation sites but are included in the map and mutant files.%%
+%blue%Note that fixed mutants are not counted as segregation sites but are included in the map and mutant files.
 
 ## Installation
 
 This script requires simuPOP 1.0.5 to execute. The installation steps are described in detail in the simuPOP website. If you are using windows, please
 * Download and install Python 2.6 from http://www.python.org.
 * Download and install simuPOP 1.0.5 or later from http://sourceforge.net/projects/simupop/files/
-* Download %red%[srv.py](Attach:srv.py)%% and execute.
+* Download [srv.py](Attach:srv.py) and execute.
 
 ## How to use this script
-
-### Graphical user interface
-
-This script can be run from a graphical user interface.
-
-Attach:simuRareVariants.jpg
 
 
 ### Run from a command line in batch mode
 
 If you need to run it in batch mode, you can use command line, using options such as
 
-->`> simuRareVariants.py --gui=batch --selDist=gamma3`
+```
+simuRareVariants.py --gui=batch --selDist=gamma3
+```
 
 Default values will be used for unspecified parameters. 
 
@@ -342,9 +344,9 @@ options:
 
 The selected population can be imported and post-processed using simuPOP. If you need to apply a quantitative trait model to the simulated population, you can use a function `pyQuanTrait` using a user-defined function. The only difference is that 'alleles' in the simulated population are locations of mutants. Penetrance model can be assigned similarly. 
 
-Example %red%[quanTraits.py](Attach:quanTraits.py)%% demonstrates how to apply a quantitative trait model and draw samples with extreme trait values.
+Example [quanTraits.py](Attach:quanTraits.py) demonstrates how to apply a quantitative trait model and draw samples with extreme trait values.
 
-Example %red%[pedigree.py](Attach:pedigree.py)%% demonstrates how to evolve the simulated population for three more generations and draw three-generational pedigrees from the simulated multi-generational population, with restrictions on pedigree size and number of affected members.
+Example [pedigree.py](Attach:pedigree.py) demonstrates how to evolve the simulated population for three more generations and draw three-generational pedigrees from the simulated multi-generational population, with restrictions on pedigree size and number of affected members.
 
 These scripts import that calls the simuRareVariant function directly and uses functions defined in that script to save samples.
 
@@ -352,13 +354,13 @@ These scripts import that calls the simuRareVariant function directly and uses f
 
 The graphical user interface allows you to perform simulations for fix types (constant, gamma and mixed gamma). If you would like to define you own distribution, you can define a function that returns selection coefficient according to your distribution and pass it to the simuRareVariants function of simuRareVariants.py. You might need to use simuPOP's random number generation functions listed in [ here](http://simupop.sourceforge.net/manual_release/build/refManual_ch2_sec5.html#class-rng ).
 
-Example %red%[myDist.py](Attach:myDist.py)%% demonstrates how to define such a function.
+Example [myDist.py](Attach:myDist.py) demonstrates how to define such a function.
 
 ### Location-specific selection coefficients
 
 If you would like to define a selection model with selection coefficients related to mutation location. You can add a parameter `loc` to the distribution function. In that case, the location (in basepair) of the new mutant will be passed to your function. This feature allows you to define a neutral region within a larger region under selection, or return neutral for mutation happens at the last nucleotide of a codon. Moreover, if you have fixed set of selection coefficients, you can use this feature to pass them to the script.
 
-Example %red%[locSpecific.py](Attach:locSpecific.py)%% demonstrates how to define a fitness function that returns location-specific fitness values.
+Example [locSpecific.py](Attach:locSpecific.py) demonstrates how to define a fitness function that returns location-specific fitness values.
 
 ### Analyze all mutation events
 
@@ -369,7 +371,7 @@ If you would like to have a list of all mutation events happened during the evol
 where type is 0 for forward mutation, 1 for backward mutation and 2 for ignored mutation in the infinite-site model. You can process this file to trace the age of all mutants.
 
 
-Example %red%[mutAge.py](Attach:mutAge.py)%% demonstrates how to process this file and calculate the age of all mutants.
+Example [mutAge.py](Attach:mutAge.py) demonstrates how to process this file and calculate the age of all mutants.
 
 ## Extending simuRareVariants.py
 

@@ -6,7 +6,7 @@ This page contains all examples in a book ''Forward-Time Population Genetics Sim
 
 ## Chapter 2: Simulation of population genetics models
 * Decay of homozygosity due to random genetic drift [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_Ht.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_Ht.log)
-* Absorption time and time to fixation [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.log)
+* Absorption time and time to fixation [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_WF_persistence.log)
 ->%blue%Note%%: This example tracks the frequency of allele 0, although in most cases, we interpret allele 0 as wild type allele, and are interested in tracking the frequency of mutant allele 1.
 * Demonstration of a bottleneck effect [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_bottleneck.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_bottleneck.log)
 * Number of ancestors of a diploid simulation [source](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_diploidGenealogy.py) [log](https://github.com/BoPeng/simuPOP-examples/blob/master/wiley_book/ch3_diploidGenealogy.log)

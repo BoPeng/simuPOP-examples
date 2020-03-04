@@ -30,18 +30,18 @@ The saved populations have the following features:
 
 5. A dictionary 'geneticMap' is used to store genetic distance of each marker.
 
-`selectMarkers.py`: This python module provides several utility functions that handles HapMap populations. When used as a script, this module creates a population using selected markers and populations
+* `selectMarkers.py`: This python module provides several utility functions that handles HapMap populations. When used as a script, this module creates a population using selected markers and populations
 
-`example1.py`: This example generates a sample using default parameters. and compares it with the HapMap population from which it is generated
+* `example1.py`: This example generates a sample using default parameters. and compares it with the HapMap population from which it is generated
 
-`example2.py`: This example simulates a case-control sample using a gene environment interaction model. 
+* `example2.py`: This example simulates a case-control sample using a gene environment interaction model. 
 
 
 **This example requires a marker list file from Illumina**. If you do not have this file, you can get a similar file from http://www.openbioinformatics.org/gengen/gengen_download.html. You should then change line 46 of example 2 from `ann = open('HumanHap550v3_A.lst')` to `ann = open('hh550v3_snptable.txt')`, and line 49 from `names.append(line.split(',')[1])` to `names.append(line.split('\t')[0])`.
 
-`example3.py`: This example simulates recent and remote selective sweep and draw trio samples
+* `example3.py`: This example simulates recent and remote selective sweep and draw trio samples
 
-`example4.py`: This example simulates an admixed population
+* `example4.py`: This example simulates an admixed population
 
 **These examples are described in detailed** in [this paper](http://www.biomedcentral.com/1471-2105/11/442/abstract). Please do not hesitate to contact me for any question. More examples will be added when simuGWAS.py is used to produce other types of samples.
 
@@ -77,13 +77,9 @@ to check what options are available.
 All these scripts could be imported from another script. Because it is clear to specify all parameters in a script, all examples (example1.py, ... example4.py) import and executes script in this way. After these populations are simulated, these scripts use different techniques to analyze them.
 
 
-### Note:
+### Question from user:
 
-It should be noted that to run the script example2.py as provided, the file HumanHap550v3_A.lst (list of all Illumina markers) is needed. I downloaded what I think is a similar file from here: http://www.openbioinformatics.org/gengen/gengen_download.html
-
-I had to change the file to be comma delimited rather than tabs. This list of Illumina markers seems to be different, because 'rs4491689' is the 2944th marker on chromosome 2, and the original example2.py script only grabs 2000 markers on chromosome 2. Once I updated this to grab 3000 markers from each chromosome, example2.py executed correctly.
-
-I can upload a corrected version if it's desired.
+* It should be noted that to run the script example2.py as provided, the file HumanHap550v3_A.lst (list of all Illumina markers) is needed. I downloaded what I think is a similar file from here: http://www.openbioinformatics.org/gengen/gengen_download.html. I had to change the file to be comma delimited rather than tabs. This list of Illumina markers seems to be different, because 'rs4491689' is the 2944th marker on chromosome 2, and the original example2.py script only grabs 2000 markers on chromosome 2. Once I updated this to grab 3000 markers from each chromosome, example2.py executed correctly.
 
 * Note that in simuGWAS.py lines 227-229 it is indicated that an exponential expansion model is used. But the paper (BMC Bioinformatics 2010) says that linear expansion was used and indeed the script produces a linear growth. The function is also identical to the 'linearExpansion' function in the source code 5.6 on page 125 in the book by Peng, Kimmel and Amos (ISBN: 9780470503485).
 

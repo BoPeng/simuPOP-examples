@@ -85,7 +85,7 @@ All these scripts could be imported from another script. Because it is clear to 
 
 * The reason for choosing 50000 as the default final population size is a bit unclear to me. In simuGWAS.py it is noted that this "is the recommended value when all HapMap populations are used (60+60+90)*200". Yes there are 60+60+90 unrelated subjects in HapMap2 but the examples in the paper use HapMap3 (993 unrelated individuals) and furthermore (60+60+90)*200=42000 ... so why 50000? Choosing 50000 actually results in an expected effective population size of 12657 (according to the output that I got from running the script) which is probably a reasonable size for a present day population and very close to the number 12658 mentioned in the paper and book. So the 10^5 noted in the paper and book (the book actually says 105 but that must be a typo) should probably have been 50000!?
 
-Anser by Bo Peng:
+Answer by Bo Peng:
 
 > The expDemoFunc in simuGWAS.py is actually a typo. Both exponential and linear population growth models were tested. The exponential growth model was removed but the function name was not corrected. We apologize for the confusion. Note that simuPOP 1.1.2 provides ways to specify demographic models easily so a newer version of simuGWAS.py will remove these function altogether. 
 

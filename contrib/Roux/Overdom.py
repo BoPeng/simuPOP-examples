@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #script used in 'Roux &al, Molecular Biology and Evolution (2012)'
 import simuOpt, types, os, sys, time
-simuOpt.setOptions(alleleType='int')
+simuOpt.setOptions(alleleType='long')
 import simuPOP as sim
 from simuPOP import *
 from simuPOP.utils import *
@@ -165,7 +165,7 @@ def simulate(NA, N1, N2, Tbeforesplit, Taftersplit, r2loci, numLoci, K_sel, Mu_s
 		# apply mutation to the selected locus according to K allele model
 		KAlleleMutator(k=K_sel, rates=[Mu_sel], loci=[0]),
 		# apply mutation to the neutral sequence
-		SNPMutator(u=Mu_neut,v=0,loci=range(1,L_neut)),
+		SNPMutator(u=Mu_neut,v=0,loci=list(range(1,L_neut))),
 		#Computes the frequency of each allele at selected locus at the last generation
 		Stat(alleleFreq=0,step=1),
 		#output to the screen the frequency of the 4 first alleles at the selected locus

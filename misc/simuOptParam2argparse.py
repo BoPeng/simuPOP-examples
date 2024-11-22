@@ -11,7 +11,7 @@ import argparse
 
 def convert_options(filename, startline, endline, name):
     with open(filename) as script:
-        content = ''.join(script.readlines()[startline: endline])
+        content = ''.join(script.readlines()[startline-1: endline])
     prefix = '''
 
 class FakeSimuOptClass:
@@ -43,14 +43,17 @@ simuOpt = FakeSimuOptClass()
     # replace list
     replaces = [
     ]
-        
+
     for old, new in replaces:
         content = content.replace(old, new)
     value = {}
+
+    #print(f'Processing script:\n\n {prefix + content}\n\n')
     exec(prefix + content, value)
 
     print('import argparse')
-    print('args = argparse.ArgumentParser()')
+    print('if __name__ == "__main__":')
+    print('    args = argparse.ArgumentParser()')
     for opt in value[name]:
         if 'name' not in opt:
             continue
@@ -81,9 +84,9 @@ simuOpt = FakeSimuOptClass()
                     topt = '\n    type={},'.format(opt['type'])
             else:
                 topt = '\n    nargs="*",'
-        print('args.add_argument("--{}",{}{}\n    help="""{}""")'.format(name, default, topt, help))
-    print('args = args.parse_args()')
-        
+        print(('    args.add_argument("--{}",{}{}\n    help="""{}""")'.format(name, default, topt, help)))
+    print('    args = args.parse_args()')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('simuOptParam2argparse.py',
         description = '''This script converts a now deprecated simuOpt.Param
@@ -91,15 +94,15 @@ if __name__ == '__main__':
             semi-automatic process that assist your conversion from
             simuOpt.Param to argparser.
         ''')
-    parser.add_argument('filename', help='''file that contains the 
+    parser.add_argument('filename', help='''file that contains the
         simuOpt option list.''')
     parser.add_argument('startline', type=int,
-        help='''starting line of the option list''')
+        help='''1-based index of the starting line of the option list''')
     parser.add_argument('endline', type=int,
-        help='''last line of the option list''')
-    parser.add_argument('name',
-        help='''Name of the option list.''')
+        help='''1-based index of the last line of the option list''')
+    parser.add_argument('--name',
+        default='options',
+        help='''Name of the option list, which is usually "options"''')
     args = parser.parse_args()
     #
     convert_options(args.filename, args.startline, args.endline, args.name)
-

@@ -1,49 +1,24 @@
 #!/usr/bin/env python
 #
-# Demonstrate changes of allele frequency due to genetic drift. 
+# Demonstrate changes of allele frequency due to genetic drift.
 
 """
 This program demonstrates changes of allele frequency on single locus due to genetic drift.
 """
 
-import simuOpt, os, sys, time
+import os, sys, time
+import argparse
 from simuPOP import *
 
 try:
     from simuPOP.plotter import VarPlotter
 except:
-    print "simuRPy import failed. Please check your rpy installation."
-    print "Allele Frequencies will not be plotted"
+    print("simuRPy import failed. Please check your rpy installation.")
+    print("Allele Frequencies will not be plotted")
     useRPy = False
 else:
     useRPy = True
 
-options = [
-    {'name':'popSize',
-     'default':100,
-     'label':'Population Size',
-     'type': 'integer',
-     'validator': 'popSize > 0',
-     },
-    {'name':'p',
-     'default':0.2,
-     'type': 'number',
-     'label':'Initial Allele Frequency',
-     'validator': 'p > 0 and p < 1',
-     },
-    {'name':'generations',
-     'default':100,
-     'label':'Number of Generations',
-     'type': 'integer',
-     'validator': 'generations > 0',
-     },
-    {'name':'replications',
-     'default':5,
-     'label':'Number of Replicates',
-     'type': 'integer',
-     'validator': 'replications > 0',
-     },
-]
 
 
 def simuGeneticDrift(popSize=100, p=0.2, generations=100, replications=5):
@@ -68,7 +43,7 @@ def simuGeneticDrift(popSize=100, p=0.2, generations=100, replications=5):
         s = 20
     else:
         s = 50
-        
+
     simu.evolve(
         # everyone initially will have the same allele frequency
         initOps = [
@@ -87,19 +62,44 @@ def simuGeneticDrift(popSize=100, p=0.2, generations=100, replications=5):
     )
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='simuGeneticDrift')
+    # options = [
+#     {'name':'popSize',
+#      'default':100,
+#      'label':'Population Size',
+#      'type': 'integer',
+#      'validator': 'popSize > 0',
+#      },
+    parser.add_argument('--popSize', default=100, type=int, help='Population size')
+#     {'name':'p',
+#      'default':0.2,
+#      'type': 'number',
+#      'label':'Initial Allele Frequency',
+#      'validator': 'p > 0 and p < 1',
+#      },
+    parser.add_argument('-p', default=0.2, type=float, help='Initial Allele Frequency')
+    #     {'name':'generations',
+#      'default':100,
+#      'label':'Number of Generations',
+#      'type': 'integer',
+#      'validator': 'generations > 0',
+#      },
+    parser.add_argument('--generations', default=100, type=int, help='Number of Generations')
+#     {'name':'replications',
+#      'default':5,
+#      'label':'Number of Replicates',
+#      'type': 'integer',
+#      'validator': 'replications > 0',
+#      },
+# ]
+    parser.add_argument('--replications', default=5, type=int, help='Number of Replicates')
+
     # get all parameters
-    pars = simuOpt.Params(options, __doc__)
-    # cancelled
-    if not pars.getParam():
-        sys.exit(0)
-      
+    pars = parser.parse_args()
+
     simuGeneticDrift(pars.popSize, pars.p, pars.generations, pars.replications)
 
     # wait ten seconds before exit
     if useRPy:
-        print "Figure will be closed after 5 seconds."
+        print("Figure will be closed after 5 seconds.")
         time.sleep(5)
-        
-    
-
-    

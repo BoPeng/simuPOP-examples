@@ -6,7 +6,7 @@ import simuPOP as sim
 from simuPOP import *
 from simuPOP.utils import *
 from simuPOP.sampling import drawRandomSample
- 
+
 try:
 	from simuPOP.plotter import VarPlotter
 except:
@@ -19,7 +19,7 @@ options = [
      'name':'NA',
      'default':5000,
      'label':'Ancestral Population Size',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Ancestral population size'
     },
@@ -27,7 +27,7 @@ options = [
      'name':'N1',
      'default':1000,
      'label':'Daugther 1 Population Size',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Daughter 1 population size'
     },
@@ -35,7 +35,7 @@ options = [
      'name':'N2',
      'default':1000,
      'label':'Daugther 2 Population Size',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Daughter 2 population size'
     },
@@ -43,14 +43,14 @@ options = [
      'name':'Tbeforesplit',
      'default':1000,
      'label':'Number of Generations to simulate before split',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Number of Generations to simulate before split'
     },
     {
      'name':'Taftersplit',
      'default':200,
-     'type':[int, long],
+     'type':[int, int],
      'label':'Number of Generations to simulate after the split',
      'description':'Number of Generations to simulate after the split',
      'validator':simuOpt.valueGT(0)
@@ -75,7 +75,7 @@ options = [
      'name':'K_sel',
      'default':10,
      'label':'Number of allelic states at selected locus',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Number of allelic states at selected locus'
     },
@@ -99,7 +99,7 @@ options = [
      'name':'L_neut',
      'default':1000,
      'label':'Number of biallelic positions in the neutral locus',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Number of biallelic positions in the neutral locus'
     },
@@ -115,7 +115,7 @@ options = [
      'name':'Nsample1',
      'default':50,
      'label':'Number of individuals to sample from population 1',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Number of individuals to sample from population 1'
     },
@@ -123,7 +123,7 @@ options = [
      'name':'Nsample2',
      'default':50,
      'label':'Number of individuals to sample from population 2',
-     'type':[int, long],
+     'type':[int, int],
      'validator':simuOpt.valueGT(0),
      'description':'Number of individuals to sample from population 2'
     }
@@ -152,7 +152,7 @@ def simulate(NA, N1, N2, Tbeforesplit, Taftersplit, r2loci, numLoci, K_sel, Mu_s
 	preOps = [
 		#Resize the ancestral population at the time immediatly before the split
 		sim.ResizeSubPops([0], sizes=[N1+N2], at=Tbeforesplit-1),
-	    	# split ancestral population in 3 subpopulations only works if NA>N1+N2 
+	    	# split ancestral population in 3 subpopulations only works if NA>N1+N2
 		sim.SplitSubPops(subPops=0, sizes=[N1, N2], at=Tbeforesplit),
 		# apply overdominant selection by invoking function getfitness
 		PySelector(loci=0, func=getfitness),
@@ -165,7 +165,7 @@ def simulate(NA, N1, N2, Tbeforesplit, Taftersplit, r2loci, numLoci, K_sel, Mu_s
 		# apply mutation to the selected locus according to K allele model
 		KAlleleMutator(k=K_sel, rates=[Mu_sel], loci=[0]),
 		# apply mutation to the neutral sequence
-		SNPMutator(u=Mu_neut,v=0,loci=range(1,L_neut)),
+		SNPMutator(u=Mu_neut,v=0,loci=list(range(1,L_neut))),
 		#Computes the frequency of each allele at selected locus at the last generation
 		Stat(alleleFreq=0,step=1),
 		#output to the screen the frequency of the 4 first alleles at the selected locus
@@ -191,4 +191,3 @@ if not pars.getParam():
 
 
 simulate(pars.NA, pars.N1, pars.N2, pars.Tbeforesplit, pars.Taftersplit, pars.r2loci, pars.numLoci, pars.K_sel, pars.Mu_sel,pars.S_sel, pars.L_neut, pars.Mu_neut, pars.Nsample1, pars.Nsample2)
-

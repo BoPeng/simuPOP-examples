@@ -1,6 +1,6 @@
 #  A power calculator for case control association studies of samples with  known family histories
 
-%red%Due to a regression bug in simuPOP 1.0.4 and 1.0.5, please use simuPOP 1.0.3 or simuPOP 1.0.6 or later to execute this script.%%
+**Due to a regression bug in simuPOP 1.0.4 and 1.0.5, please use simuPOP 1.0.3 or simuPOP 1.0.6 or later to execute this script.**
 
 
 
@@ -24,7 +24,7 @@ Please cite the following paper if you have used this script for your analysis:
 
 ### Installation
 
-Because this script is written in Python and uses simuPOP for its graphical user interface, you will need to install Python (2.4 or higher, but not Python 3) and [ simuPOP](http://simupop.sf.net ) in order to use it. More specifically, you need to 
+Because this script is written in Python and uses simuPOP for its graphical user interface, you will need to install Python (2.4 or higher, but not Python 3) and [ simuPOP](http://simupop.sf.net ) in order to use it. More specifically, you need to
 
 * Install Python if it is not available.
 * Download and install %red%simuPOP 1.0.3%% or 1.0.6 or later following the installation instruction [ here](http://simupop.sourceforge.net/Main/Download ).
@@ -41,7 +41,7 @@ Please feel free to [ email me](mailto:bpeng@mdanderson.org ) if you have any qu
 
 ### How to use this script
 Our analysis assumes a disease predisposing locus and a marker locus that are
-both in Hardy Weinberg Equilibrium. To calculate the power to detect a 
+both in Hardy Weinberg Equilibrium. To calculate the power to detect a
 particular disease, you will need to disease mode (addition, recessive etc),
 prevalence, disease allele frequency, marker allele frequency, linkage
 disequilibrium between two loci (default to complete linkage), types of
@@ -53,9 +53,9 @@ Cases and controls should be specified as a dictionary of cases or controls with
 different types. The pedigree types are  presented as a string of affection status
 of father, mother, proband, and optional siblings of the proband. The affection
 status is specified as 'A' for affected, 'U' for unaffected', and '*' for unknown.
-For example, to calculate the power of two mixing pedigree types, you can use 
+For example, to calculate the power of two mixing pedigree types, you can use
   cases = "{'**A': 100, '**AA': 200}"
-which has 100 regular cases and 200 cases with an affected sibling. Of course, 
+which has 100 regular cases and 200 cases with an affected sibling. Of course,
 regular controls has the third letter as 'U'.
 
 This script can carry out the following functions:
@@ -80,7 +80,7 @@ hidden in the sense that they are not accessible from the graphical user
 interface. Please refer the description of each parameter for details.
 
 In addition to command line (you can use --gui=False to use this script in batch
-mode) and a graphical user interface, you can also import this script and use 
+mode) and a graphical user interface, you can also import this script and use
 the functions directly from another script. This will allow you to run a large
 number of analyses easily and use a logging object to dump important internal
 steps. Please refer to script [ PowerAnalysis.py](Attach:PowerAnalysis.py ) for an example. That script

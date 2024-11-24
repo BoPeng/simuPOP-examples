@@ -65,8 +65,8 @@ try:
     from simuPOP.gsl import gsl_cdf_ugaussian_P, gsl_cdf_ugaussian_Pinv
 except ImportError:
     from scipy.stats import norm
-    gsl_cdf_ugaussian_P = norm.cdf
-    gsl_cdf_ugaussian_Pinv = norm.ppf
+    gsl_cdf_ugaussian_P = lambda x: float(norm.cdf(x))
+    gsl_cdf_ugaussian_Pinv = lambda x: float(norm.ppf(x))
 
 
 class pedProbabilities:

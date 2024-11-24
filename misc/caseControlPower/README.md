@@ -6,6 +6,8 @@
 
 ### ChangeLog
 
+* Nov 20, 2024: Remove dependency on `simuOpt` and `simuPOP.gsl` (use `scipy`).
+
 * Jan, 30, 2012: Modify the 'Additive_AA' model to use an alternative definition of detectable relative risk. Use a slightly different power analysis formula.
 
 

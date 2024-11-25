@@ -26,7 +26,7 @@ calculate statistical power. You should specify number of cases and controls.
 Given number of cases and controls and power, calculate minimal detectable
 relative risk.
 
-3. Calculate needed samples from ratio between ctrols / cases
+3. Calculate needed samples from ratio between controls / cases
 Given power and relative risk, calculate number of cases and controls from
 a ratio.
 
@@ -34,7 +34,7 @@ a ratio.
 Given power and relative risk, calculate number of cases and controls from
 a fixed number of controls.
 
-4. Calculate needed cased from fixed cases.
+5. Calculate needed cased from fixed cases.
 Given power and relative risk, calculate number of cases and controls from
 a fixed number of cases.
 
@@ -54,17 +54,18 @@ so analyses on multiple disease models can be performed all at once.
 
 import argparse
 import itertools
-
-
+import json
 
 from math import ceil, sqrt
 
 try:
     import simuOpt
+
     simuOpt.setOptions(quiet=True)
     from simuPOP.gsl import gsl_cdf_ugaussian_P, gsl_cdf_ugaussian_Pinv
 except ImportError:
     from scipy.stats import norm
+
     gsl_cdf_ugaussian_P = lambda x: float(norm.cdf(x))
     gsl_cdf_ugaussian_Pinv = lambda x: float(norm.ppf(x))
 
@@ -668,18 +669,30 @@ if __name__ == "__main__":
         | LogAdditive: r_AB=sqrt(r_AA * r_BB), Grr = r_AA / r_BB
         """,
     )
-    parser.add_argument("--K", default=0.05, help="""Disease prevalence""")
-    parser.add_argument("--p", default=0.15, help="""Disease allele frequency""")
+    parser.add_argument(
+        "--K", default=[0.05], nargs="+", type=float, help="""Disease prevalence"""
+    )
+    parser.add_argument(
+        "--p",
+        default=[0.15],
+        nargs="+",
+        type=float,
+        help="""Disease allele frequency""",
+    )
     parser.add_argument(
         "--x",
-        default=0,
+        default=[0],
+        nargs="+",
+        type=float,
         help="""Marker allele frequency if D' != 1
         Marker allele frequency. If LD is 1, this parameter is ignored
         because it will be assumed to be the same as disease allele frequency.""",
     )
     parser.add_argument(
         "--genoP",
-        default=0,
+        default=[0],
+        nargs="+",
+        type=float,
         help="""
         This option is hidden. If specified, it overrides parameter
         p and specifies the frequency of causal genotypes so that
@@ -689,9 +702,11 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--genoX",
-        default=0,
+        default=[0],
+        nargs="+",
+        type=float,
         help="""
-        This option is hidden. If specified, it overrides paramter
+        This option is hidden. If specified, it overrides parameter
         x and specifies the frequency of causal genotypes at the marker locus
         so that
         | p=sqrt(genoX) for a recessive model (frequency of AA).
@@ -701,6 +716,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--Dprime",
         default=1,
+        type=float,
         help="""LD (D')
         Linkage disequilibrium (D') between marker locus and disease locus.
         Only one of parameters Dprime and R2 should be specified.""",
@@ -708,6 +724,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--R2",
         default=1,
+        type=float,
         help="""LD (R2)
         Linkage disequilibrium (R2) between marker locus and disease locus.
         Only one of the parameters Dprime and R2 should be specified.""",
@@ -742,6 +759,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--cases",
         default={"**A": 1000},
+        type=json.loads,
         help="""#cases
         Type and number of cases. The count will be considered as
         weight in 'sample size from #ctrl/#case', and 'sample size from fixed #ctrl'
@@ -749,6 +767,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--controls",
+        type=json.loads,
         default={"**U": 1000},
         help="""#controls
         Type and number of controls. The count will be considered
@@ -757,20 +776,27 @@ if __name__ == "__main__":
     parser.add_argument(
         "--ratio",
         default=1,
+        type=float,
         help="""#controls / #cases for analysis 3
         Ratio, use for calculate sample size from #ctrl/#case""",
     )
-    parser.add_argument("--alpha", default=1e-07, help="""Significant level""")
+    parser.add_argument(
+        "--alpha", default=[1e-07], type=float, nargs="+", help="""Significant level"""
+    )
     parser.add_argument(
         "--power",
-        default=0.8,
+        default=[0.8],
+        nargs="+",
+        type=float,
         help="""Power
         Power of a case-control assocition test if number cases
         and relative risk are specified""",
     )
     parser.add_argument(
         "--Grr",
-        default=1.2,
+        default=[1.2],
+        nargs="+",
+        type=float,
         help="""Genotype Relative risk
         Relative genotype risk for a disease model. The exact definition
         of this quantity depends on the disease model.""",
@@ -779,7 +805,7 @@ if __name__ == "__main__":
 
     if pars.analysis == "Statistical power":
         # calculate power
-        print("K\tp (or genoype p)\tx (or genotype x)\tD' (or R2)\talpha\tGrr\tPower")
+        print("K\tp\tx\tLD\talpha\tGrr\tPower")
         for K, p, x, genoP, genoX, alpha, Grr in itertools.product(
             pars.K, pars.p, pars.x, pars.genoP, pars.genoX, pars.alpha, pars.Grr
         ):
@@ -807,7 +833,7 @@ if __name__ == "__main__":
                 )
             )
     elif pars.analysis == "Minimal detectable relative risk":
-        print("K\tp (or genoype p)\tx (or genotype x)\tD' (or R2)\talpha\tPower\tGrr")
+        print("K\tp\tx\tLD\talpha\tPower\tGrr")
         for K, p, x, genoP, genoX, alpha, power in itertools.product(
             pars.K, pars.p, pars.x, pars.genoP, pars.genoX, pars.alpha, pars.power
         ):
@@ -837,7 +863,7 @@ if __name__ == "__main__":
             )
     elif pars.analysis == "Sample size from #ctrl/#case":
         print(
-            "K\tp (or genoype p)\tx (or genotype x)\tD' (or R2)\talpha\tPower\tGrr\tSampleSize"
+            "K\tp\tx\tLD\talpha\tPower\tGrr\tSampleSize"
         )
         for K, p, x, genoP, genoX, alpha, power, Grr in itertools.product(
             pars.K,
@@ -880,7 +906,7 @@ if __name__ == "__main__":
             )
     elif pars.analysis == "Sample size from fixed #ctrl":
         print(
-            "K\tp (or genoype p)\tx (or genotype x)\tD' (or R2)\talpha\tPower\tGrr\tSampleSize"
+            "K\tp\tx\tLD\talpha\tPower\tGrr\tSampleSize"
         )
         for K, p, x, genoP, genoX, alpha, power, Grr in itertools.product(
             pars.K,
@@ -922,7 +948,7 @@ if __name__ == "__main__":
             )
     elif pars.analysis == "Sample size from fixed #case":
         print(
-            "K\tp (or genoype p)\tx (or genotype x)\tD' (or R2)\talpha\tPower\tGrr\tSampleSize"
+            "K\tp\tx\tLD\talpha\tPower\tGrr\tSampleSize"
         )
         for K, p, x, genoP, genoX, alpha, power, Grr in itertools.product(
             pars.K,
